@@ -1,8 +1,23 @@
-<mat-menu #appMenu="matMenu">
-  <button mat-menu-item>Settings</button>
-  <button mat-menu-item>Help</button>
-</mat-menu>
+<mat-toolbar color="primary">
 
-<button mat-icon-button [matMenuTriggerFor]="appMenu">
- Menu
-</button>
+  <button mat-button routerLink="/">
+    <mat-icon>home</mat-icon>
+    {{utilService.env.app_name}}
+  </button>
+
+  <!-- This fills the remaining space of the current row -->
+  <span class="fill-remaining-space"></span>
+  <div fxLayout="row" fxShow="false" fxShow.gt-sm>
+    <button mat-button routerLink="/home">Products</button>
+    <button mat-button routerLink="/home">Dashboard</button>
+  </div>
+  <button mat-button [mat-menu-trigger-for]="menu" fxHide="false" fxHide.gt-sm>
+    <mat-icon>menu</mat-icon>
+  </button>
+
+</mat-toolbar>
+<mat-menu x-position="before" #menu="matMenu">
+  <button mat-menu-item routerLink="/products">Products</button>
+  <button mat-menu-item routerLink="/dashboard">Dashboard</button>
+  <!--<button mat-menu-item>Help</button>-->
+</mat-menu>
