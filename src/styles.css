@@ -14,3 +14,16 @@
   margin: 0;
   padding: 0;
 }
+
+html *
+{
+  /*font-size: 1em !important;*/
+  color: #000 !important;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 100;
+}
+
+.mat-button-wrapper, .mat-icon{
+  color:white !important;
+}
+
