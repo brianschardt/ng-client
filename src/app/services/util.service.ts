@@ -5,6 +5,7 @@ import { Router }           from '@angular/router';
 import { CookieService }    from 'ngx-cookie-service';
 import * as pe              from 'parse-error';
 import { environment }      from '../../environments/environment';
+import { map } from "rxjs/operators";
 
 @Injectable()
 export class UtilService {
@@ -32,10 +33,13 @@ export class UtilService {
     localStorage.removeItem(name);
   }
 
-  to(promise) {//global function that will help use handle promise rejections, this article talks about it http://blog.grossman.io/how-to-write-async-await-without-try-catch-blocks-in-javascript/
+  to(promise, parse?) {//global function that will help use handle promise rejections, this article talks about it http://blog.grossman.io/how-to-write-async-await-without-try-catch-blocks-in-javascript/
     return promise.then(data => {
       return [null, data];
-    }).catch(err => [pe(err)]);
+    }).catch(err => {
+      if(parse===false) return [err];
+      return [pe(err)]
+    });
   }
 
   TE = function(err_message:string, log?:boolean){ // TE stands for Throw Error
@@ -54,95 +58,86 @@ export class UtilService {
     return environment.apiUrl;
   }
 
-  // post(url, data){
-  //   var headers = new Headers();
-  //   if(url[0]=='/'){
-  //     url = this.getApiUrl()+url;
-  //     headers.append('Content-Type', 'application/json');
-  //     headers.append('Authorization', this.getAuthToken());
-  //   }
-  //   return new Promise(resolve=>{
-  //     this.http.post(url, data, { headers: headers })
-  //       .map(response => response.json())
-  //       .subscribe(data=>{
-  //         resolve(data);
-  //       }, error=>{
-  //         resolve(error.json());
-  //       })
-  //   })
-  //
-  // }
-  //
-  // put(url, data){
-  //   var headers = new Headers();
-  //   if(url[0]=='/'){
-  //     url = this.getApiUrl()+url;
-  //     headers.append('Content-Type', 'application/json');
-  //     headers.append('Authorization', this.getAuthToken());
-  //   }
-  //   return new Promise(resolve=>{
-  //     this.http
-  //       .put(url, data, { headers: headers })
-  //       .map(response => response.json())
-  //       .subscribe(data=>{
-  //         resolve(data);
-  //       })
-  //   })
-  //
-  // }
-  //
-  // patch(url, data){
-  //   var headers = new Headers();
-  //   if(url[0]=='/'){
-  //     url = this.getApiUrl()+url;
-  //     headers.append('Content-Type', 'application/json');
-  //     headers.append('Authorization', this.getAuthToken());
-  //   }
-  //   return new Promise(resolve=>{
-  //     this.http
-  //       .patch(url, data, { headers: headers })
-  //       .map(response => response.json())
-  //       .subscribe(data=>{
-  //         resolve(data);
-  //       })
-  //   })
-  //
-  // }
-  // delete(url){
-  //   var headers = new Headers();
-  //   if(url[0]=='/'){
-  //     url = this.getApiUrl()+url;
-  //     headers.append('Content-Type', 'application/json');
-  //     headers.append('Authorization', this.getAuthToken());
-  //   }
-  //   return new Promise(resolve=>{
-  //     this.http
-  //       .patch(url, { headers: headers })
-  //       .map(response => response.json())
-  //       .subscribe(data=>{
-  //         resolve(data);
-  //       })
-  //   })
-  //
-  // }
-  // get(url){
-  //   var headers = new Headers();
-  //   if(url[0]=='/'){
-  //     url = this.getApiUrl()+url;
-  //     headers.append('Content-Type', 'application/json');
-  //     headers.append('Authorization', this.getAuthToken());
-  //   }
-  //
-  //   return new Promise(resolve=>{
-  //     this.http
-  //       .get(url, { headers: headers })
-  //       .map(response => response.json())
-  //       .subscribe(data=>{
-  //         resolve(data);
-  //       })
-  //   })
-  //
-  // }
+  async post(url, data){
+    console.log('test')
+    var headers = new Headers();
+    if(url[0]=='/'){
+      url = this.getApiUrl()+url;
+      headers.append('Content-Type', 'application/json');
+      headers.append('Authorization', this.getAuthToken());
+    }
+
+    let err, res, send;
+    [err, res] = await this.to(this.http.post(url, data, { headers: headers }).toPromise(), false);
+    if(err) send = err;
+    if(res) send = res;
+
+    return JSON.parse(send._body);
+  }
+
+  async put(url, data){
+    var headers = new Headers();
+    if(url[0]=='/'){
+      url = this.getApiUrl()+url;
+      headers.append('Content-Type', 'application/json');
+      headers.append('Authorization', this.getAuthToken());
+    }
+
+    let err, res, send;
+    [err, res] = await this.to(this.http.put(url, data, { headers: headers }).toPromise(), false);
+    if(err) send = err;
+    if(res) send = res;
+
+    return JSON.parse(send._body);
+  }
+
+  async patch(url, data){
+    var headers = new Headers();
+    if(url[0]=='/'){
+      url = this.getApiUrl()+url;
+      headers.append('Content-Type', 'application/json');
+      headers.append('Authorization', this.getAuthToken());
+    }
+    let err, res, send;
+    [err, res] = await this.to(this.http.patch(url, data, { headers: headers }).toPromise(), false);
+
+    if(err) send = err;
+    if(res) send = res;
+
+    return JSON.parse(send._body);
+  }
+  async delete(url){
+    var headers = new Headers();
+    if(url[0]=='/'){
+      url = this.getApiUrl()+url;
+      headers.append('Content-Type', 'application/json');
+      headers.append('Authorization', this.getAuthToken());
+    }
+    let err, res, send;
+    [err, res] = await this.to(this.http.delete(url, { headers: headers }).toPromise(), false);
+
+    if(err) send = err;
+    if(res) send = res;
+
+    return JSON.parse(send._body);
+  }
+
+  async get(url){
+    var headers = new Headers();
+    if(url[0]=='/'){
+      url = this.getApiUrl()+url;
+      headers.append('Content-Type', 'application/json');
+      headers.append('Authorization', this.getAuthToken());
+    }
+
+    let err, res, send;
+    [err, res] = await this.to(this.http.get(url, { headers: headers }).toPromise(), false);
+
+    if(err) send = err;
+    if(res) send = res;
+
+    return JSON.parse(send._body);
+  }
 
   capFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);

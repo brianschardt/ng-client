@@ -20,6 +20,8 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { FooterComponent } from './components/partials/footer/footer.component';
 import { NavbarComponent } from './components/partials/navbar/navbar.component';
+import { LoginComponent } from './components/auth/login/login.component';
+import { RegisterComponent } from './components/auth/register/register.component';
 
 
 @NgModule({
@@ -28,6 +30,8 @@ import { NavbarComponent } from './components/partials/navbar/navbar.component';
     HomeComponent,
     FooterComponent,
     NavbarComponent,
+    LoginComponent,
+    RegisterComponent,
 
   ],
   imports: [

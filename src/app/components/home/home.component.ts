@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {UtilService} from "../../services/util.service";
 
 @Component({
   selector: 'app-home',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private util:UtilService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    let err, res
+    [err, res] = await this.util.to(this.util.post('/v1/users', {email:'brianss@gmail.com', password:'test'}));
+    if(err) this.util.TE('error', err);
+
+    console.log('res', res)
   }
+
 
 }
