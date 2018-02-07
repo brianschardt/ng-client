@@ -25,9 +25,10 @@ export class UserService {
   }
 
 
-  logout(){
+  logout(routeToHome?){
     this.deleteAuthToken();
     this.util.removeLocalStorage('user');
+    if(!routeToHome) this.util.route('/home');
     // this.user = null;
   }
 
