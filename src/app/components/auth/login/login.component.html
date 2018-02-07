@@ -1,3 +1,29 @@
-<p>
-  login works!
-</p>
+<div ngClass.lt-md="mt-100" ngClass.gt-sm="mt-150" fxLayout="row" fxLayoutAlign="center">
+  <mat-card ngClass.lt-sm="width-300" ngClass.gt-sm="width-500">
+
+    <div fxLayout="row" fxLayoutAlign="center" class="mat-display-1">{{title}}</div>
+    <form (ngSubmit)="onSubmit()">
+
+      <mat-form-field class="full-width">
+        <input [(ngModel)]="user_info.unique" matInput placeholder="Email or Phone" name="unique" [formControl]="emailFrontendError">
+        <!--<mat-hint>Errors appear instantly!</mat-hint>-->
+        <mat-error *ngIf="emailFrontendError.invalid && !emailBackendError">{{getEmailErrorMessage()}}</mat-error>
+        <mat-error *ngIf="emailBackendError">{{emailBackendError}}</mat-error>
+      </mat-form-field>
+
+
+      <mat-form-field class="full-width">
+        <input matInput [(ngModel)]="user_info.password" placeholder="Password" name="password">
+      </mat-form-field>
+
+      <mat-form-field *ngIf="register===true" class="full-width">
+        <input matInput [(ngModel)]="user_info.confirm_password" placeholder="Confirm Password" name="confirm-password">
+      </mat-form-field>
+
+      <div fxLayout="row" fxLayoutAlign="center center" >
+        <button mat-raised-button >Submit</button>
+      </div>
+    </form>
+  </mat-card>
+</div>
+

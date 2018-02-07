@@ -10,6 +10,8 @@
   <div fxLayout="row" fxShow="false" fxShow.gt-sm>
     <button class="nav-button" mat-button routerLink="/home">Products</button>
     <button class="nav-button" mat-button routerLink="/home">Dashboard</button>
+    <button class="nav-button" mat-button routerLink="/login">Login/Register</button>
+    <button class="nav-button" mat-button routerLink="/home">Logout</button>
   </div>
   <button mat-button [mat-menu-trigger-for]="menu" fxHide="false" fxHide.gt-sm>
     <mat-icon>menu</mat-icon>
@@ -17,9 +19,10 @@
 
 </mat-toolbar>
 <mat-menu yPosition="below" #menu="matMenu" [overlapTrigger]="false">
-  <button mat-menu-item routerLink="/products">Profile</button>
-  <button mat-menu-item routerLink="/dashboard">Settings</button>
-  <button mat-menu-item routerLink="/dashboard">Dashboard</button>
-  <button mat-menu-item routerLink="/dashboard">Login/Register</button>
-  <button mat-menu-item routerLink="/dashboard">Logout</button>
+  <button class="nav-menu-item" mat-menu-item routerLink="/products">Profile</button>
+  <button class="nav-menu-item" mat-menu-item routerLink="/dashboard">Settings</button>
+  <button class="nav-menu-item" mat-menu-item routerLink="/dashboard">Dashboard</button>
+  <mat-divider></mat-divider>
+  <button class="nav-menu-item" mat-menu-item routerLink="/login">Login/Register</button>
+  <button class="nav-menu-item" mat-menu-item routerLink="/dashboard">Logout</button>
 </mat-menu>

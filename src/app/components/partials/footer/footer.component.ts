@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {UtilService} from "../../../services/util.service";
 
 @Component({
   selector: 'app-footer',
@@ -6,8 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./footer.component.css']
 })
 export class FooterComponent implements OnInit {
-
-  constructor() { }
+  date:Number = new Date().getFullYear();
+  constructor(private util:UtilService) { }
 
   ngOnInit() {
   }

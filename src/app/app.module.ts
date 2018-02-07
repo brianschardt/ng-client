@@ -1,15 +1,20 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCheckboxModule, MatToolbarModule, MatMenuModule, MatIconModule } from '@angular/material';
+import { MatGridListModule, MatDividerModule, MatCardModule, MatButtonModule, MatSidenavModule, MatCheckboxModule, MatToolbarModule, MatMenuModule, MatIconModule, MatInputModule } from '@angular/material';
+
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+
 
 import { HttpModule } from '@angular/http';
 import { routing } from './app.routing';
-import { FormsModule } from '@angular/forms';
 import { FacebookModule } from 'ngx-facebook';
+
+import { FlexLayoutModule } from "@angular/flex-layout";
 //services
 import { EnvService } from './services/env.service';
 import { UtilService } from './services/util.service';
+import { UserService } from './services/user.service';
 import { CookieService } from 'ngx-cookie-service';
 
 //guards
@@ -47,9 +52,17 @@ import { RegisterComponent } from './components/auth/register/register.component
     MatCheckboxModule,
     MatToolbarModule,
     FacebookModule.forRoot(),
+    FlexLayoutModule,
+    MatSidenavModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatDividerModule,
+    MatCardModule,
+    MatGridListModule
   ],
   providers: [
     UtilService,
+    UserService
     EnvService,
     CookieService,
     ApiGuard,
