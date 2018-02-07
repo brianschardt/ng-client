@@ -2,7 +2,7 @@
 
   <button mat-button routerLink="/">
     <mat-icon>home</mat-icon>
-    {{utilService.env.app_name}}
+    {{util.env.app_name}}
   </button>
 
   <!-- This fills the remaining space of the current row -->
@@ -19,10 +19,16 @@
 
 </mat-toolbar>
 <mat-menu yPosition="below" #menu="matMenu" [overlapTrigger]="false">
-  <button class="nav-menu-item" mat-menu-item routerLink="/products">Profile</button>
-  <button class="nav-menu-item" mat-menu-item routerLink="/dashboard">Settings</button>
-  <button class="nav-menu-item" mat-menu-item routerLink="/dashboard">Dashboard</button>
-  <mat-divider></mat-divider>
-  <button class="nav-menu-item" mat-menu-item routerLink="/login">Login/Register</button>
-  <button class="nav-menu-item" mat-menu-item routerLink="/dashboard">Logout</button>
+  <div *ngIf="userService.loggedIn()===true">
+    <button class="nav-menu-item" mat-menu-item routerLink="/user/profile">Profile</button>
+    <button class="nav-menu-item" mat-menu-item routerLink="/user/profile">Settings</button>
+    <button class="nav-menu-item" mat-menu-item routerLink="/user/profile">Dashboard</button>
+    <mat-divider></mat-divider>
+    <button *ngIf="userService.loggedIn()==true" class="nav-menu-item" mat-menu-item (click)="onLogout()">Logout</button>
+  </div>
+
+  <div *ngIf="userService.loggedIn()===false">
+    <button class="nav-menu-item" mat-menu-item routerLink="/home">Home</button>
+    <button class="nav-menu-item" mat-menu-item routerLink="/login">Login/Register</button>
+  </div>
 </mat-menu>

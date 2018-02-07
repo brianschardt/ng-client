@@ -19,15 +19,42 @@ export class LoginComponent implements OnInit {
   title:string = 'Login / Register';
   register:boolean = false;
 
-  emailBackendError:string = 'err';
-  emailFrontendError = new FormControl('', [Validators.required]);
+  emailInput = new FormControl('', [Validators.required]);
   getEmailErrorMessage() {
-    return this.emailFrontendError.hasError('required') ? 'You must enter an Email or Phone number.' : '';
+    var err_message:string = '';
+    if(this.emailInput.hasError('required')) err_message = 'You must enter an Email or Phone number.';
+    if(this.emailInput.hasError('custom')) {
+      err_message = this.emailInput.getError('custom');
+    }
+
+    return err_message;
+  }
+
+  passwordInput = new FormControl('', [Validators.required]);
+  getPasswordErrorMessage() {
+    var err_message:string = '';
+    if(this.passwordInput.hasError('required')) err_message = 'You must enter a password.';
+    if(this.passwordInput.hasError('custom')) {
+      err_message = this.passwordInput.getError('custom');
+    }
+
+    return err_message;
+  }
+
+  confirmPasswordInput = new FormControl('');
+  getConfirmPasswordErrorMessage() {
+    var err_message:string = '';
+    if(this.confirmPasswordInput.hasError('custom')) {
+      err_message = this.confirmPasswordInput.getError('custom');
+    }
+
+    return err_message;
   }
 
   constructor(private util:UtilService, private userService:UserService) { }
 
   ngOnInit() {
+
   }
 
   async onSubmit(){
@@ -38,6 +65,8 @@ export class LoginComponent implements OnInit {
 
     if(this.register==false){
       this.login(data);
+    }else{
+      this.create(data);
     }
 
     return;
@@ -50,19 +79,44 @@ export class LoginComponent implements OnInit {
     this.title="Log in / Register";
   }
 
+  async
   async login(data: Object){
-    console.log('form', this.emailFrontendError);
     var err, res:any;
     [err, res] = await this.util.to(this.userService.loginReg(data));
     if(err){
-      if(err.message=='Please enter a password to login'){
-        console.log('***password err');
+      switch(err.message){
+        case 'Please enter a password to login':
+          this.passwordInput.setErrors({custom: err.message});
+          break;
+        case 'Not registered':
+          this.title = "Please Register"
+          this.register = true;
+          break;
+        case 'invalid password':
+          this.passwordInput.setErrors({custom: err.message});
+          break;
+        default:
+          this.emailInput.setErrors({custom: err.message});
       }
-      this.emailBackendError = err.message;
-      console.log('err', this.emailBackendError);
+
       return;
     }
-    this.emailBackendError = null;
 
+    this.util.route('user/profile');
+  }
+
+  async create(data: Object){
+    if(this.user_info.confirm_password!=this.user_info.password){
+      this.passwordInput.setErrors({custom: 'Passwords do not match'});
+      this.confirmPasswordInput.setErrors({custom: 'Passwords do not match'});
+      return
+    }
+
+    let err, res;
+    [err, res] = await this.util.to(this.userService.createAccount(data))
+
+    if(err) this.util.TE(err);
+
+    this.util.route('user/profile');
   }
 }

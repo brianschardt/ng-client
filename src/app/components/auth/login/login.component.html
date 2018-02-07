@@ -1,23 +1,25 @@
-<div ngClass.lt-md="mt-100" ngClass.gt-sm="mt-150" fxLayout="row" fxLayoutAlign="center">
+<div ngClass.lt-md="mt-50" ngClass.gt-sm="mt-100" fxLayout="row" fxLayoutAlign="center">
   <mat-card ngClass.lt-sm="width-300" ngClass.gt-sm="width-500">
 
     <div fxLayout="row" fxLayoutAlign="center" class="mat-display-1">{{title}}</div>
+    <div *ngIf="register===true" fxLayout="row" fxLayoutAlign="center"><a (click)="onTryLogin()">Click Here </a> to log in.</div>
     <form (ngSubmit)="onSubmit()">
 
       <mat-form-field class="full-width">
-        <input [(ngModel)]="user_info.unique" matInput placeholder="Email or Phone" name="unique" [formControl]="emailFrontendError">
+        <input [(ngModel)]="user_info.unique" matInput placeholder="Email or Phone" name="unique" [formControl]="emailInput">
         <!--<mat-hint>Errors appear instantly!</mat-hint>-->
-        <mat-error *ngIf="emailFrontendError.invalid && !emailBackendError">{{getEmailErrorMessage()}}</mat-error>
-        <mat-error *ngIf="emailBackendError">{{emailBackendError}}</mat-error>
+        <mat-error *ngIf="emailInput.invalid">{{getEmailErrorMessage()}}</mat-error>
       </mat-form-field>
 
 
       <mat-form-field class="full-width">
-        <input matInput [(ngModel)]="user_info.password" placeholder="Password" name="password">
+        <input type="password" matInput [(ngModel)]="user_info.password" placeholder="Password" name="password" [formControl]="passwordInput">
+        <mat-error *ngIf="passwordInput.invalid">{{getPasswordErrorMessage()}}</mat-error>
       </mat-form-field>
 
       <mat-form-field *ngIf="register===true" class="full-width">
-        <input matInput [(ngModel)]="user_info.confirm_password" placeholder="Confirm Password" name="confirm-password">
+        <input type="password" matInput [(ngModel)]="user_info.confirm_password" placeholder="Confirm Password" name="confirm-password" [formControl]="confirmPasswordInput">
+        <mat-error *ngIf="confirmPasswordInput.invalid">{{getConfirmPasswordErrorMessage()}}</mat-error>
       </mat-form-field>
 
       <div fxLayout="row" fxLayoutAlign="center center" >

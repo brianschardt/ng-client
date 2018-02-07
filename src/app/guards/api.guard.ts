@@ -1,12 +1,20 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-
+import { CanActivate} from '@angular/router';
+// import { Observable } from 'rxjs/Observable';
+import { UserService } from './../services/user.service';
+import { UtilService } from './../services/util.service';
 @Injectable()
 export class ApiGuard implements CanActivate {
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    return true;
+  constructor(private userService: UserService, private utilService: UtilService){}
+  canActivate(): boolean {
+    if(this.userService.loggedIn()){
+      return true;
+    }else{
+      this.utilService.route('/home');
+      return false;
+    }
   }
+  // canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  //     return this.userService.loggedIn();
+  // }
 }

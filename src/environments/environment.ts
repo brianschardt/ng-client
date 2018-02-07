@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  apiUrl:'http://127.0.0.1:8080',
+  apiUrl:'http://127.0.0.1:3000',
   facebook_app_id:'1234567890',
 
   app_name:'Your Company',

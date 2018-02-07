@@ -27,6 +27,7 @@ import { FooterComponent } from './components/partials/footer/footer.component';
 import { NavbarComponent } from './components/partials/navbar/navbar.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
+import { ProfileComponent } from './components/user/profile/profile.component';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { RegisterComponent } from './components/auth/register/register.component
     NavbarComponent,
     LoginComponent,
     RegisterComponent,
+    ProfileComponent,
 
   ],
   imports: [
@@ -62,7 +64,7 @@ import { RegisterComponent } from './components/auth/register/register.component
   ],
   providers: [
     UtilService,
-    UserService
+    UserService,
     EnvService,
     CookieService,
     ApiGuard,
