@@ -1,10 +1,10 @@
-import { Injectable }       from '@angular/core';
 import { Model }            from 'bamfstore';
 import { UtilService }      from './../services/util.service';
 import { AppModule }        from './../app.module';
 
-@Injectable()
 export class User extends Model {
+  apiUpdateValues = ['email', 'phone'];//these are the values that will be sent to the API
+
   first;
   last;
   auth;
@@ -21,18 +21,15 @@ export class User extends Model {
     phone:{type:'string'},
     auth:{type:'boolean'},
     token:{type:'string'},
-  }
+  };
 
   util;
-  // util = new UtilService(Router, Http, CookieService, EnvService);
   constructor(){
     super();
-
     //this is the only maintainable way for model to use outside services
+    //this is what causes the ciurcular dependency warning, however this will not cause any errors
     this.util = AppModule.injector.get(UtilService); //https://stackoverflow.com/questions/39101865/angular-2-inject-dependency-outside-constructor
   }
-
-  apiUpdateValues = ['email', 'phone'];
 
   fullname(){
     return this.first + ' ' + this.last;
@@ -42,9 +39,8 @@ export class User extends Model {
     return this.findOne({auth:true});
   }
 
-  async save(){
+  async saveAPI(){
     let err, res:any;
-
     let update_data = {};
 
     for (let i in this.apiUpdateValues){
@@ -55,17 +51,10 @@ export class User extends Model {
 
     [err, res] = await this.util.to(this.util.put('/v1/users', update_data ));
 
-    if(err){
-      console.log(err);
-      return err;
-    }
+    if(err) this.util.TE(err, true);
+    if(!res.success) this.util.TE(res.error, true);
 
-    if(!res.success){
-      console.log(res.message);
-      return res.message;
-    }
-
-    super.save();//calls the parent model method and saves it in storage
+    this.save();
   }
 
 
