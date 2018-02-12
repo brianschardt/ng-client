@@ -35,9 +35,11 @@ export class UserService {
   login(info: LoginInfo){
     this.setAuthToken(info.token)
     this.util.setlocalStorage('user', info.user);
+    info.user.auth = true;
+    info.user.token = info.token;
     this.auth = <User> User.create(info.user);
 
-    console.log('auth user', this.auth);
+    return this.auth;
   }
 
   async createAccount(data:Object){

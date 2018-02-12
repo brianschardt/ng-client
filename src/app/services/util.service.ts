@@ -5,7 +5,7 @@ import { Router }           from '@angular/router';
 import { CookieService }    from 'ngx-cookie-service';
 import * as pe              from 'parse-error';
 import { environment }      from '../../environments/environment';
-import { map } from "rxjs/operators";
+
 
 @Injectable()
 export class UtilService {
@@ -14,7 +14,7 @@ export class UtilService {
     this.env = this.envService;
   }
   use(){
-    console.log('use');
+    console.log('using util service');
     //does nothing this is to get rid of the error that it is never used
   }
   getAuthToken(){

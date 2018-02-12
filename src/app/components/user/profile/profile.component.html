@@ -1,3 +1,25 @@
-<p>
-  profile works!
-</p>
+<div ngClass.lt-md="mt-50" ngClass.gt-sm="mt-100" fxLayout="row" fxLayoutAlign="center">
+  <mat-card ngClass.lt-sm="width-300" ngClass.gt-sm="width-500">
+
+    <div fxLayout="row" fxLayoutAlign="center" class="mat-display-1">Update Profile Information</div>
+    <form (ngSubmit)="onSubmit()"  [formGroup]="profileForm">
+
+      <mat-form-field class="full-width">
+        <input formControlName="email" [(ngModel)]="user.email" matInput placeholder="Email" name="email">
+        <!--<mat-hint>Errors appear instantly!</mat-hint>-->
+        <mat-error>{{getInputErrorMessage('email')}}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <input formControlName="phone" [(ngModel)]="user.phone" matInput placeholder="Phone Number" name="phone">
+        <!--<mat-hint>Errors appear instantly!</mat-hint>-->
+        <mat-error>{{getInputErrorMessage('phone')}}</mat-error>
+      </mat-form-field>
+
+
+      <div fxLayout="row" fxLayoutAlign="center center" >
+        <button mat-raised-button [disabled]="!profileForm.valid">Save</button>
+      </div>
+    </form>
+  </mat-card>
+</div>

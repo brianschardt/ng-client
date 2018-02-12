@@ -17,6 +17,9 @@ import { UtilService } from './services/util.service';
 import { UserService } from './services/user.service';
 import { CookieService } from 'ngx-cookie-service';
 
+//models
+import { User } from './models/user.model';
+import { Model } from './models/model';
 //guards
 import { ApiGuard } from './guards/api.guard';
 
@@ -29,6 +32,8 @@ import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { ProfileComponent } from './components/user/profile/profile.component';
 
+
+import { Injector } from '@angular/core';
 
 @NgModule({
   declarations: [
@@ -71,4 +76,9 @@ import { ProfileComponent } from './components/user/profile/profile.component';
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule { //https://stackoverflow.com/questions/39101865/angular-2-inject-dependency-outside-constructor
+  static injector: Injector;
+  constructor(injector: Injector) {
+    AppModule.injector = injector;
+  }
+}

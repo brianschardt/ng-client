@@ -8,10 +8,17 @@
   <!-- This fills the remaining space of the current row -->
   <span class="fill-remaining-space"></span>
   <div fxLayout="row" fxShow="false" fxShow.gt-sm>
-    <button class="nav-button" mat-button routerLink="/home">Products</button>
-    <button class="nav-button" mat-button routerLink="/home">Dashboard</button>
-    <button class="nav-button" mat-button routerLink="/login">Login/Register</button>
-    <button class="nav-button" mat-button routerLink="/home">Logout</button>
+    <div *ngIf="userService.loggedIn()===true">
+      <button class="nav-button" mat-button routerLink="/user/profile">Profile</button>
+      <button class="nav-button" mat-button routerLink="/user/profile">Settings</button>
+      <button class="nav-button" mat-button routerLink="/user/profile">Dashboard</button>
+      <button class="nav-button" mat-button (click)="onLogout()">Logout</button>
+    </div>
+    <div *ngIf="userService.loggedIn()===false">
+      <button class="nav-button" mat-button routerLink="/home">Home</button>
+      <button class="nav-button" mat-button routerLink="/login">Login/Register</button>
+    </div>
+
   </div>
   <button mat-button [mat-menu-trigger-for]="menu" fxHide="false" fxHide.gt-sm>
     <mat-icon>menu</mat-icon>
@@ -24,7 +31,7 @@
     <button class="nav-menu-item" mat-menu-item routerLink="/user/profile">Settings</button>
     <button class="nav-menu-item" mat-menu-item routerLink="/user/profile">Dashboard</button>
     <mat-divider></mat-divider>
-    <button *ngIf="userService.loggedIn()==true" class="nav-menu-item" mat-menu-item (click)="onLogout()">Logout</button>
+    <button class="nav-menu-item" mat-menu-item (click)="onLogout()">Logout</button>
   </div>
 
   <div *ngIf="userService.loggedIn()===false">

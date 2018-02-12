@@ -8,7 +8,7 @@ import {UtilService} from "../../../services/util.service";
 })
 export class FooterComponent implements OnInit {
   date:Number = new Date().getFullYear();
-  constructor(private util:UtilService) { }
+  constructor(public util:UtilService) { }
 
   ngOnInit() {
   }
