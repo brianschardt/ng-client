@@ -8,18 +8,18 @@
       <mat-form-field class="full-width">
         <input formControlName="unique" [(ngModel)]="user_info.unique" matInput placeholder="Email or Phone" name="unique">
         <!--<mat-hint>Errors appear instantly!</mat-hint>-->
-        <mat-error>{{getEmailErrorMessage()}}</mat-error>
+        <mat-error>{{getInputErrorMessage('unique')}}</mat-error>
       </mat-form-field>
 
 
       <mat-form-field class="full-width">
         <input formControlName="password" type="password" matInput [(ngModel)]="user_info.password" placeholder="Password" name="password">
-        <mat-error>{{getPasswordErrorMessage()}}</mat-error>
+        <mat-error>{{getInputErrorMessage('password')}}</mat-error>
       </mat-form-field>
 
       <mat-form-field *ngIf="register===true" class="full-width">
         <input formControlName="confirmPassword" type="password" matInput [(ngModel)]="user_info.confirm_password" placeholder="Confirm Password" name="confirm-password">
-        <mat-error>{{getConfirmPasswordErrorMessage()}}</mat-error>
+        <mat-error>{{getInputErrorMessage('confirmPassword')}}</mat-error>
       </mat-form-field>
 
       <div fxLayout="row" fxLayoutAlign="center center" >
