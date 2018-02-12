@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { UtilService } from "../../../services/util.service";
-import { UserService } from './../../../services/user.service';
-import { User } from './../../../models/user.model';
-import {MatSnackBar} from '@angular/material';
+import { Component, OnInit }      from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { UtilService }            from "../../../services/util.service";
+import { UserService }            from './../../../services/user.service';
+import { User }                   from './../../../models/user.model';
+import { MatSnackBar }            from '@angular/material';
 
 @Component({
   selector: 'app-profile',
@@ -36,7 +36,6 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.user = User.Auth();
-    // this.profileForm.get('email').setValue('adfs');
   }
 
 
@@ -57,9 +56,7 @@ export class ProfileComponent implements OnInit {
       }
     }
 
-    this.snackBar.open('User', 'Successfully Updated', {
-      duration: 2000,
-    });
+    this.snackBar.open('User', 'Successfully Updated', {duration: 2000});
 
   }
 
