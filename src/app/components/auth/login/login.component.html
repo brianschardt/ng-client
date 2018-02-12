@@ -3,27 +3,27 @@
 
     <div fxLayout="row" fxLayoutAlign="center" class="mat-display-1">{{title}}</div>
     <div *ngIf="register===true" fxLayout="row" fxLayoutAlign="center"><a (click)="onTryLogin()">Click Here </a> to log in.</div>
-    <form (ngSubmit)="onSubmit()">
+    <form (ngSubmit)="onSubmit()"  [formGroup]="loginForm">
 
       <mat-form-field class="full-width">
-        <input [(ngModel)]="user_info.unique" matInput placeholder="Email or Phone" name="unique" [formControl]="emailInput">
+        <input formControlName="unique" [(ngModel)]="user_info.unique" matInput placeholder="Email or Phone" name="unique">
         <!--<mat-hint>Errors appear instantly!</mat-hint>-->
-        <mat-error *ngIf="emailInput.invalid">{{getEmailErrorMessage()}}</mat-error>
+        <mat-error>{{getEmailErrorMessage()}}</mat-error>
       </mat-form-field>
 
 
       <mat-form-field class="full-width">
-        <input type="password" matInput [(ngModel)]="user_info.password" placeholder="Password" name="password" [formControl]="passwordInput">
-        <mat-error *ngIf="passwordInput.invalid">{{getPasswordErrorMessage()}}</mat-error>
+        <input formControlName="password" type="password" matInput [(ngModel)]="user_info.password" placeholder="Password" name="password">
+        <mat-error>{{getPasswordErrorMessage()}}</mat-error>
       </mat-form-field>
 
       <mat-form-field *ngIf="register===true" class="full-width">
-        <input type="password" matInput [(ngModel)]="user_info.confirm_password" placeholder="Confirm Password" name="confirm-password" [formControl]="confirmPasswordInput">
-        <mat-error *ngIf="confirmPasswordInput.invalid">{{getConfirmPasswordErrorMessage()}}</mat-error>
+        <input formControlName="confirmPassword" type="password" matInput [(ngModel)]="user_info.confirm_password" placeholder="Confirm Password" name="confirm-password">
+        <mat-error>{{getConfirmPasswordErrorMessage()}}</mat-error>
       </mat-form-field>
 
       <div fxLayout="row" fxLayoutAlign="center center" >
-        <button mat-raised-button >Submit</button>
+        <button mat-raised-button [disabled]="!loginForm.valid">Submit</button>
       </div>
     </form>
   </mat-card>

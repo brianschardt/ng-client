@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { FormControl, FormGroupDirective, FormGroup, NgForm, Validators } from '@angular/forms';
 import { UtilService } from "../../../services/util.service";
 import { UserService } from './../../../services/user.service';
 
@@ -19,33 +19,36 @@ export class LoginComponent implements OnInit {
   title:string = 'Login / Register';
   register:boolean = false;
 
-  emailInput = new FormControl('', [Validators.required]);
+  loginForm = new FormGroup({
+    unique: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required]),
+    confirmPassword: new FormControl(''),
+  });
+
   getEmailErrorMessage() {
     var err_message:string = '';
-    if(this.emailInput.hasError('required')) err_message = 'You must enter an Email or Phone number.';
-    if(this.emailInput.hasError('custom')) {
-      err_message = this.emailInput.getError('custom');
+    if(this.loginForm.get('unique').hasError('required')) err_message = 'You must enter an Email or Phone number.';
+    if(this.loginForm.get('unique').hasError('custom')) {
+      err_message = this.loginForm.get('unique').getError('custom');
     }
 
     return err_message;
   }
 
-  passwordInput = new FormControl('', [Validators.required]);
   getPasswordErrorMessage() {
     var err_message:string = '';
-    if(this.passwordInput.hasError('required')) err_message = 'You must enter a password.';
-    if(this.passwordInput.hasError('custom')) {
-      err_message = this.passwordInput.getError('custom');
+    if(this.loginForm.get('password').hasError('required')) err_message = 'You must enter a password.';
+    if(this.loginForm.get('password').hasError('custom')) {
+      err_message = this.loginForm.get('password').getError('custom');
     }
 
     return err_message;
   }
 
-  confirmPasswordInput = new FormControl('');
   getConfirmPasswordErrorMessage() {
     var err_message:string = '';
-    if(this.confirmPasswordInput.hasError('custom')) {
-      err_message = this.confirmPasswordInput.getError('custom');
+    if(this.loginForm.get('confirmPassword').hasError('custom')) {
+      err_message = this.loginForm.get('confirmPassword').getError('custom');
     }
 
     return err_message;
@@ -79,24 +82,23 @@ export class LoginComponent implements OnInit {
     this.title="Log in / Register";
   }
 
-  async
   async login(data: Object){
     var err, res:any;
     [err, res] = await this.util.to(this.userService.loginReg(data));
     if(err){
       switch(err.message){
         case 'Please enter a password to login':
-          this.passwordInput.setErrors({custom: err.message});
+          this.loginForm.get('password').setErrors({custom: err.message});
           break;
         case 'Not registered':
-          this.title = "Please Register"
+          this.title = "Please Register";
           this.register = true;
           break;
         case 'invalid password':
-          this.passwordInput.setErrors({custom: err.message});
+          this.loginForm.get('password').setErrors({custom: err.message});
           break;
         default:
-          this.emailInput.setErrors({custom: err.message});
+          this.loginForm.get('unique').setErrors({custom: err.message});
       }
 
       return;
@@ -107,8 +109,8 @@ export class LoginComponent implements OnInit {
 
   async create(data: Object){
     if(this.user_info.confirm_password!=this.user_info.password){
-      this.passwordInput.setErrors({custom: 'Passwords do not match'});
-      this.confirmPasswordInput.setErrors({custom: 'Passwords do not match'});
+      this.loginForm.get('password').setErrors({custom: 'Passwords do not match'});
+      this.loginForm.get('confirmPassword').setErrors({custom: 'Passwords do not match'});
       return
     }
 
