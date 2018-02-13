@@ -1,6 +1,4 @@
-import { Injectable }       from '@angular/core';
 import * as _ from 'underscore';
-
 
 export class Model{
 
@@ -34,6 +32,10 @@ export class Model{
     query_obj[primary_id] = (<any> this)[primary_id];
     return query_obj;
   }
+
+  uniqueIdName(){
+    return (this.constructor as any).getPrimaryKey();
+  }
   save(){
     let query_obj = this.uniqueQueryIdentifier();
     let update_object = this.toObject();
@@ -44,6 +46,42 @@ export class Model{
   remove(){
     let query_obj = this.uniqueQueryIdentifier();
     (this.constructor as any).remove(query_obj);
+  }
+
+  getStorageValues(){
+    let name:any = this.uniqueIdName();
+    let id:any = (<any> this)[name];
+    return (this.constructor as any).findById(id).toObject();
+  }
+
+  getInstanceValues(){
+    return this.toObject();
+  }
+
+  getPropertyDifferences(){
+    return (this.constructor as any).difference(this.getStorageValues(), this.getInstanceValues());
+  }
+
+  storageDifference(){
+    let diff = this.getPropertyDifferences();
+    let storage = this.getStorageValues();
+
+    let storage_differences = _.pick(storage, (value:any, key:any, object:any)=>{
+      return diff.includes(key);
+    })
+
+    return storage_differences;
+  }
+
+  instanceDifference(){
+    let diff = this.getPropertyDifferences();
+    let instance = this.getInstanceValues();
+
+    let instance_differences = _.pick(instance, (value:any, key:any, object:any)=>{
+      return diff.includes(key);
+    })
+
+    return instance_differences;
   }
   //Static
   static describe(): Array<string> {
@@ -199,6 +237,8 @@ export class Model{
     }else{
       instance = all_data.filter((data:object)=>{ return _.isMatch(data, search);})[0];
     }
+    if(typeof instance === 'undefined' || !instance) return null;
+
     instance = this.instantiateObject(instance)
     return instance;
   }
@@ -243,5 +283,12 @@ export class Model{
     let obj:any = {};
     obj[primary_key] = id;
     return this.findOne(obj);
+  }
+
+  static difference(a:any, b:any){
+    return _.reduce(a, function(result:any, value:any, key:any) {
+      return _.isEqual(value, b[key]) ?
+        result : result.concat(key);
+    }, []);
   }
 }

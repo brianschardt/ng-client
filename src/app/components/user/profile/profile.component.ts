@@ -52,6 +52,9 @@ export class ProfileComponent implements OnInit {
         this.throwInputError('email', err.message);
       }
 
+      console.log('err', err);
+      if(err.message == 'Nothing Updated') this.snackBar.open('User', 'Nothing to Update', {duration: 2000});
+
       return;
     }
 

@@ -1,10 +1,11 @@
 import { Model }            from 'bamfstore';
+// import { Model }           from './model';
 import { UtilService }      from './../services/util.service';
-import { UserService }      from './../services/user.service';
-import { AppInjector }        from './../app.module';
+import { AppInjector }      from './../app.module';
+import * as _               from 'underscore';
 
 export class User extends Model {
-  apiUpdateValues = ['email', 'phone'];//these are the values that will be sent to the API
+  apiUpdateValues:Array<string> = ['email', 'phone'];//these are the values that will be sent to the API
 
   first;
   last;
@@ -25,7 +26,6 @@ export class User extends Model {
   };
 
   util;
-  userService;
   constructor(){
     super();
     //this is the only maintainable way for model to use outside services
@@ -40,8 +40,6 @@ export class User extends Model {
 
   static Auth(){
     let user:User = <User> this.findOne({auth:true});
-    if(!user) return null; //this is here for a future update of bamfstore
-    if(!user.token) return null;
     return user;
   }
 
@@ -53,11 +51,13 @@ export class User extends Model {
     let err, res:any;
     let update_data = {};
 
-    for (let i in this.apiUpdateValues){
-      let value = this.apiUpdateValues[i]
-      if(this[value]) update_data[value] = this[value];
-    }
-    console.log(update_data);
+    let differences = this.instanceDifference();
+
+    if(_.isEmpty(differences)) this.util.TE('Nothing Updated');
+
+    update_data = _.pick(differences, (value, key, object) => this.apiUpdateValues.includes(key) );
+
+    if(_.isEmpty(update_data)) this.util.TE('Nothing Updated');
 
     [err, res] = await this.util.to(this.util.put('/v1/users', update_data ));
 
