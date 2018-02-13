@@ -66,19 +66,16 @@ export class LoginComponent implements OnInit {
     var err, res:any;
     [err, res] = await this.util.to(this.userService.loginReg(data));
     if(err){
-      switch(err.message){
-        case 'Please enter a password to login':
-          this.throwInputError('password', err.message);
-          break;
-        case 'Not registered':
-          this.title = "Please Register";
-          this.register = true;
-          break;
-        case 'invalid password':
-          this.throwInputError('password', err.message);
-          break;
-        default:
-          this.throwInputError('unique', err.message);
+      console.log('asdfas', err)
+      if(err.message.includes('password') || err.message.includes('Password')){
+        this.throwInputError('password', err.message);
+      }else if(err.message === 'Not registered'){
+        this.title = "Please Register";
+        this.register = true;
+      }else if(err.message.includes('phone') || err.message.includes('email')){
+        this.throwInputError('unique', err.message);
+      }else{
+        this.throwInputError('unique', err.message);
       }
 
       return;

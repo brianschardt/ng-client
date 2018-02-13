@@ -59,7 +59,6 @@ export class UtilService {
   }
 
   async post(url, data){
-    console.log('test')
     var headers = new Headers();
     if(url[0]=='/'){
       url = this.getApiUrl()+url;

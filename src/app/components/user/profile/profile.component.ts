@@ -45,11 +45,12 @@ export class ProfileComponent implements OnInit {
 
     if(err){
       if(err){
-        switch(err.message){
-          case 'This email address is already in use':
-            this.throwInputError('email', err.message);
-          default:
-            this.throwInputError('email', err.message);
+        if(err.message.includes('phone') || err.message.includes('Phone')){
+          this.throwInputError('phone', err.message);
+        }
+
+        if(err.message.includes('email') || err.message.includes('Email')){
+          this.throwInputError('email', err.message);
         }
 
         return;
