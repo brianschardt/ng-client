@@ -1,20 +1,18 @@
 import { Injectable }     from '@angular/core';
 import { FacebookService, InitParams, LoginOptions } from 'ngx-facebook';
-import { environment }    from '../../environments/environment';
-import { UtilService }    from './util.service';
-import * as jwtDecode     from 'jwt-decode';
-import { CookieService }  from 'ngx-cookie-service';
+// import * as jwtDecode     from 'jwt-decode';
+// import { CookieService }  from 'ngx-cookie-service';
 import { LoginInfo }      from './../interfaces/login-info';
 import { User }           from './../models/user.model';
+import { UtilService }    from './util.service';
 
 @Injectable()
 export class UserService {
 
-  auth:User;
-  loggedIn:boolean;
-  constructor(private util: UtilService, private fb: FacebookService, private cookieService:CookieService) {
+  _user:User;
+  constructor(private util: UtilService, private fb: FacebookService) {
     let initParams: InitParams = {
-      appId: environment.facebook_app_id,
+      appId: this.util.env.facebook_app_id,
       xfbml: true,
       version: 'v2.8'
     };
@@ -22,13 +20,29 @@ export class UserService {
   }
 
   use(){
-    //does nothing just to stop throwing error
+    console.log('using user service');
+  }
+
+  set user(user:User){
+    this._user = user;
+  }
+
+  get user(){
+    if(!this._user) this._user = User.Auth();
+
+    return this._user;
   }
 
 
+  loggedIn(){ //so i change change how this is detected
+    if(!this.user) return false;
+    return true;
+  }
+
   logout(routeToHome?){
+    console.log('loggin out deleting user data');
     User.removeAllData();
-    this.loggedIn = false;
+    delete this._user;
     if(!routeToHome) this.util.route('/home');
   }
 
@@ -36,9 +50,8 @@ export class UserService {
     // this.setAuthToken(info.token);
     info.user.auth = true;
     info.user.token = info.token;
-    this.auth = <User> User.create(info.user);
-    this.loggedIn = true;
-    return this.auth;
+    this.user = <User> User.create(info.user);
+    return this.user;
   }
 
   async createAccount(data:Object){
@@ -116,12 +129,5 @@ export class UserService {
     }
     return login_info
   }
-
-  // setAuthToken(token){
-  //   let dec = jwtDecode(token)
-  //   var date = new Date(dec.exp*1000);
-  //   // this.user = dec._doc;
-  //   this.cookieService.set('token', token, date);
-  // }
 
 }

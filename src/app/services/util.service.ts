@@ -10,6 +10,7 @@ import { User }             from './../models/user.model';
 @Injectable()
 export class UtilService {
   env:any;
+
   constructor(private router: Router, private http: Http, private cookieService:CookieService, private envService:EnvService) {
     this.env = this.envService;
   }
@@ -59,7 +60,7 @@ export class UtilService {
     headers.append('Content-Type', 'application/json');
     let user:User = <User> User.Auth();
     if(user){
-      let token:User = user.token;
+      let token:string = user.token;
       headers.append('Authorization', token);
     }
     return headers;

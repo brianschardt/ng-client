@@ -1,6 +1,7 @@
 import { Model }            from 'bamfstore';
 import { UtilService }      from './../services/util.service';
-import { AppModule }        from './../app.module';
+import { UserService }      from './../services/user.service';
+import { AppInjector }        from './../app.module';
 
 export class User extends Model {
   apiUpdateValues = ['email', 'phone'];//these are the values that will be sent to the API
@@ -29,7 +30,8 @@ export class User extends Model {
     super();
     //this is the only maintainable way for model to use outside services
     //this is what causes the ciurcular dependency warning, however this will not cause any errors
-    this.util = AppModule.injector.get(UtilService); //https://stackoverflow.com/questions/39101865/angular-2-inject-dependency-outside-constructor
+    this.util        = AppInjector.get(UtilService); //https://stackoverflow.com/questions/39101865/angular-2-inject-dependency-outside-constructor
+    // this.userService = AppInjector.get(UserService);
   }
 
   fullname(){
@@ -38,13 +40,13 @@ export class User extends Model {
 
   static Auth(){
     let user:User = <User> this.findOne({auth:true});
+    if(!user) return null; //this is here for a future update of bamfstore
     if(!user.token) return null;
     return user;
   }
 
   logout(){
     this.remove();
-    this.userService.loggedIn = false;
   }
 
   async saveAPI(){

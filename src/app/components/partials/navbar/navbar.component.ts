@@ -13,11 +13,11 @@ export class NavbarComponent implements OnInit {
   constructor(public util:UtilService, public userService:UserService) { }
 
   ngOnInit() {
-    this.user = <User> User.Auth();
+    this.user = <User> this.userService.user;
   }
 
   onLogout(){
-    if(this.user) this.user.logout();
+    this.userService.logout()
   }
 
 }

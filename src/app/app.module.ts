@@ -1,10 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { Injector } from '@angular/core';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { MatSnackBarModule, MatGridListModule, MatDividerModule, MatCardModule, MatButtonModule, MatSidenavModule, MatCheckboxModule, MatToolbarModule, MatMenuModule, MatIconModule, MatInputModule } from '@angular/material';
 
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-
 
 import { HttpModule } from '@angular/http';
 import { routing } from './app.routing';
@@ -31,9 +31,6 @@ import { NavbarComponent } from './components/partials/navbar/navbar.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { ProfileComponent } from './components/user/profile/profile.component';
-
-
-import { Injector } from '@angular/core';
 
 @NgModule({
   declarations: [
@@ -74,12 +71,14 @@ import { Injector } from '@angular/core';
     EnvService,
     CookieService,
     ApiGuard,
+    User
   ],
   bootstrap: [AppComponent],
 })
+
 export class AppModule { //https://stackoverflow.com/questions/39101865/angular-2-inject-dependency-outside-constructor
-  static injector: Injector;
   constructor(injector: Injector) {
-    AppModule.injector = injector;
+    AppInjector = injector;
   }
 }
+export let AppInjector: Injector;
