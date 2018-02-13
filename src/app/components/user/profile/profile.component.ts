@@ -44,17 +44,15 @@ export class ProfileComponent implements OnInit {
     [err, res] = await this.util.to(this.user.saveAPI());
 
     if(err){
-      if(err){
-        if(err.message.includes('phone') || err.message.includes('Phone')){
-          this.throwInputError('phone', err.message);
-        }
-
-        if(err.message.includes('email') || err.message.includes('Email')){
-          this.throwInputError('email', err.message);
-        }
-
-        return;
+      if(err.message.includes('phone') || err.message.includes('Phone')){
+        this.throwInputError('phone', err.message);
       }
+
+      if(err.message.includes('email') || err.message.includes('Email')){
+        this.throwInputError('email', err.message);
+      }
+
+      return;
     }
 
     this.snackBar.open('User', 'Successfully Updated', {duration: 2000});

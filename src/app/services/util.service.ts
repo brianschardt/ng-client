@@ -5,7 +5,7 @@ import { Router }           from '@angular/router';
 import { CookieService }    from 'ngx-cookie-service';
 import * as pe              from 'parse-error';
 import { environment }      from '../../environments/environment';
-
+import { User }             from './../models/user.model';
 
 @Injectable()
 export class UtilService {
@@ -16,9 +16,6 @@ export class UtilService {
   use(){
     console.log('using util service');
     //does nothing this is to get rid of the error that it is never used
-  }
-  getAuthToken(){
-    return this.cookieService.get('token');
   }
 
   setlocalStorage(name:string, data:Object){
@@ -58,84 +55,79 @@ export class UtilService {
     return environment.apiUrl;
   }
 
+  apiHeaders(headers:any){
+    headers.append('Content-Type', 'application/json');
+    let user:User = <User> User.Auth();
+    if(user){
+      let token:User = user.token;
+      headers.append('Authorization', token);
+    }
+    return headers;
+  }
+
+  responder(err, res){
+    let send;
+    if (err) send = err;
+    if (res) send = res;
+    return JSON.parse(send._body);
+  }
+
   async post(url, data){
     var headers = new Headers();
     if(url[0]=='/'){
       url = this.getApiUrl()+url;
-      headers.append('Content-Type', 'application/json');
-      headers.append('Authorization', this.getAuthToken());
+      headers = this.apiHeaders(headers);
     }
 
-    let err, res, send;
+    let err, res;
     [err, res] = await this.to(this.http.post(url, data, { headers: headers }).toPromise(), false);
-    if(err) send = err;
-    if(res) send = res;
-
-    return JSON.parse(send._body);
+    return this.responder(err, res);
   }
 
   async put(url, data){
     var headers = new Headers();
     if(url[0]=='/'){
       url = this.getApiUrl()+url;
-      headers.append('Content-Type', 'application/json');
-      headers.append('Authorization', this.getAuthToken());
+      headers = this.apiHeaders(headers);
     }
 
-    let err, res, send;
+    let err, res;
     [err, res] = await this.to(this.http.put(url, data, { headers: headers }).toPromise(), false);
-    if(err) send = err;
-    if(res) send = res;
-
-    return JSON.parse(send._body);
+    return this.responder(err, res);
   }
 
   async patch(url, data){
     var headers = new Headers();
     if(url[0]=='/'){
       url = this.getApiUrl()+url;
-      headers.append('Content-Type', 'application/json');
-      headers.append('Authorization', this.getAuthToken());
+      headers = this.apiHeaders(headers);
     }
-    let err, res, send;
+    let err, res;
     [err, res] = await this.to(this.http.patch(url, data, { headers: headers }).toPromise(), false);
-
-    if(err) send = err;
-    if(res) send = res;
-
-    return JSON.parse(send._body);
+    return this.responder(err, res);
   }
+
   async delete(url){
     var headers = new Headers();
     if(url[0]=='/'){
       url = this.getApiUrl()+url;
-      headers.append('Content-Type', 'application/json');
-      headers.append('Authorization', this.getAuthToken());
+      headers = this.apiHeaders(headers);
     }
-    let err, res, send;
+    let err, res;
     [err, res] = await this.to(this.http.delete(url, { headers: headers }).toPromise(), false);
-
-    if(err) send = err;
-    if(res) send = res;
-
-    return JSON.parse(send._body);
+    return this.responder(err, res);
   }
 
   async get(url){
     var headers = new Headers();
     if(url[0]=='/'){
       url = this.getApiUrl()+url;
-      headers.append('Content-Type', 'application/json');
-      headers.append('Authorization', this.getAuthToken());
+      headers = this.apiHeaders(headers);
     }
 
-    let err, res, send;
+    let err, res;
     [err, res] = await this.to(this.http.get(url, { headers: headers }).toPromise(), false);
-
-    if(err) send = err;
-    if(res) send = res;
-
-    return JSON.parse(send._body);
+    return this.responder(err, res);
   }
 
   capFirstLetter(string) {

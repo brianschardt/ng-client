@@ -11,6 +11,7 @@ import { User }           from './../models/user.model';
 export class UserService {
 
   auth:User;
+  loggedIn:boolean;
   constructor(private util: UtilService, private fb: FacebookService, private cookieService:CookieService) {
     let initParams: InitParams = {
       appId: environment.facebook_app_id,
@@ -26,20 +27,17 @@ export class UserService {
 
 
   logout(routeToHome?){
-    this.deleteAuthToken();
     User.removeAllData();
-
+    this.loggedIn = false;
     if(!routeToHome) this.util.route('/home');
-    // this.user = null;
   }
 
   login(info: LoginInfo){
-    this.setAuthToken(info.token)
-    this.util.setlocalStorage('user', info.user);
+    // this.setAuthToken(info.token);
     info.user.auth = true;
     info.user.token = info.token;
     this.auth = <User> User.create(info.user);
-
+    this.loggedIn = true;
     return this.auth;
   }
 
@@ -119,27 +117,11 @@ export class UserService {
     return login_info
   }
 
-  setAuthToken(token){
-    let dec = jwtDecode(token)
-    var date = new Date(dec.exp*1000);
-    // this.user = dec._doc;
-    this.cookieService.set('token', token, date);
-  }
-
-  deleteAuthToken(){
-    console.log('deleting auth token');
-    return this.cookieService.delete('token');
-  }
-  getAuthToken(){
-    return this.cookieService.get('token');
-  }
-
-  loggedIn(){
-    if(!this.getAuthToken()){
-      return false;
-    }
-
-    return true;
-  }
+  // setAuthToken(token){
+  //   let dec = jwtDecode(token)
+  //   var date = new Date(dec.exp*1000);
+  //   // this.user = dec._doc;
+  //   this.cookieService.set('token', token, date);
+  // }
 
 }

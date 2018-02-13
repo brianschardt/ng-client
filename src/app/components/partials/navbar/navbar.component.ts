@@ -1,22 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { UtilService } from './../../../services/util.service';
 import { UserService } from './../../../services/user.service';
+import { User } from './../../../models/user.model';
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-
+  user:User;
   constructor(public util:UtilService, public userService:UserService) { }
 
   ngOnInit() {
-    this.util.use();
-    this.userService.use();
+    this.user = <User> User.Auth();
   }
 
   onLogout(){
-    this.userService.logout();
+    if(this.user) this.user.logout();
   }
 
 }

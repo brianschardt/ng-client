@@ -27,7 +27,13 @@ export class LoginComponent implements OnInit {
 
   getInputErrorMessage(input_name:string){
     var err_message:string = '';
-    if(this.loginForm.get(input_name).hasError('required')) err_message = 'You must enter an Email or Phone number.';
+    if(this.loginForm.get(input_name).hasError('required')) {
+      if(input_name=='unique'){
+        err_message = 'You must enter an Email or Phone number.';
+      }else{
+        err_message = 'You must enter a Password.';
+      }
+    }
     if(this.loginForm.get(input_name).hasError('custom')) {
       err_message = this.loginForm.get(input_name).getError('custom');
     }

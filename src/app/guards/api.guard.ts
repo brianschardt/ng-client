@@ -7,7 +7,7 @@ import { UtilService } from './../services/util.service';
 export class ApiGuard implements CanActivate {
   constructor(private userService: UserService, private utilService: UtilService){}
   canActivate(): boolean {
-    if(this.userService.loggedIn()){
+    if(this.userService.loggedIn){
       return true;
     }else{
       this.utilService.route('/home');

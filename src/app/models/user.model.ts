@@ -24,6 +24,7 @@ export class User extends Model {
   };
 
   util;
+  userService;
   constructor(){
     super();
     //this is the only maintainable way for model to use outside services
@@ -36,7 +37,14 @@ export class User extends Model {
   }
 
   static Auth(){
-    return this.findOne({auth:true});
+    let user:User = <User> this.findOne({auth:true});
+    if(!user.token) return null;
+    return user;
+  }
+
+  logout(){
+    this.remove();
+    this.userService.loggedIn = false;
   }
 
   async saveAPI(){
