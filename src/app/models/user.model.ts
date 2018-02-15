@@ -46,14 +46,14 @@ export class User extends Model {
     return full_name;
   }
 
-  static Auth(){
-    let user:User = <User> this.findOne({auth:true});
-    return user;
-  }
-
   logout(){
     this.remove();
     this.util.route('/home');
+  }
+
+  static Auth(){
+    let user:User = <User> this.findOne({auth:true});
+    return user;
   }
 
   async saveAPI(){
