@@ -12,8 +12,7 @@ import { MatSnackBar }            from '@angular/material';
 })
 export class ProfileComponent implements OnInit {
   user;
-  user2;
-  user3;
+
   profileForm = new FormGroup({
     email: new FormControl('', []),
     phone: new FormControl('', []),
