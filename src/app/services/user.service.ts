@@ -11,12 +11,12 @@ export class UserService {
 
   _user:User;
   constructor(private util: UtilService, private fb: FacebookService) {
-    let initParams: InitParams = {
-      appId: this.util.env.facebook_app_id,
-      xfbml: true,
-      version: 'v2.8'
-    };
-    this.fb.init(initParams);
+    // let initParams: InitParams = {
+    //   appId: this.util.env.facebook_app_id,
+    //   xfbml: true,
+    //   version: 'v2.8'
+    // };
+    // this.fb.init(initParams);
   }
 
   use(){
@@ -88,46 +88,46 @@ export class UserService {
     return login_info;
   }
 
-  async loginSocial(service: String){
-    let err, res;
-    let login_info: LoginInfo
-    switch(service){
-      case 'facebook':
-        // const scopes = 'public_profile,user_friends,email,pages_show_list';
-        const scopes = 'public_profile,user_friends,email,user_birthday';
-        const loginOptions: LoginOptions = {
-          enable_profile_selector: true,
-          return_scopes: true,
-          scope: scopes
-        };
-        [err, res] = await this.util.to(this.fb.login(loginOptions));
-
-        let a_res = res.authResponse;
-        [err, res] = await this.util.to(this.fb.api('/me'+'?fields=id,name,picture,email,birthday,gender,age_range,devices,location,first_name,last_name,website'));
-        [err ,res] = await this.util.to(this.util.post('/v1/social-auth/facebook', {auth_response:a_res, user_info:res}));
-
-        if(res.success == false){
-          err = res.error
-        }
-        if(err) this.util.TE(err, true);
-        login_info = {
-          token:res.token,
-          user:res.user
-        }
-
-        break;
-      case  'google':
-        err = 'google login not setup';
-        break;
-      default:
-        err = 'no auth login service selected';
-        break;
-    }
-
-    if(!err){
-      this.login(login_info);
-    }
-    return login_info
-  }
+  // async loginSocial(service: String){
+  //   let err, res;
+  //   let login_info: LoginInfo
+  //   switch(service){
+  //     case 'facebook':
+  //       // const scopes = 'public_profile,user_friends,email,pages_show_list';
+  //       const scopes = 'public_profile,user_friends,email,user_birthday';
+  //       const loginOptions: LoginOptions = {
+  //         enable_profile_selector: true,
+  //         return_scopes: true,
+  //         scope: scopes
+  //       };
+  //       [err, res] = await this.util.to(this.fb.login(loginOptions));
+  //
+  //       let a_res = res.authResponse;
+  //       [err, res] = await this.util.to(this.fb.api('/me'+'?fields=id,name,picture,email,birthday,gender,age_range,devices,location,first_name,last_name,website'));
+  //       [err ,res] = await this.util.to(this.util.post('/v1/social-auth/facebook', {auth_response:a_res, user_info:res}));
+  //
+  //       if(res.success == false){
+  //         err = res.error
+  //       }
+  //       if(err) this.util.TE(err, true);
+  //       login_info = {
+  //         token:res.token,
+  //         user:res.user
+  //       }
+  //
+  //       break;
+  //     case  'google':
+  //       err = 'google login not setup';
+  //       break;
+  //     default:
+  //       err = 'no auth login service selected';
+  //       break;
+  //   }
+  //
+  //   if(!err){
+  //     this.login(login_info);
+  //   }
+  //   return login_info
+  // }
 
 }

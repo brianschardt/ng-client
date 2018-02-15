@@ -16,6 +16,17 @@
         <mat-error>{{getInputErrorMessage('phone')}}</mat-error>
       </mat-form-field>
 
+      <mat-form-field class="full-width">
+        <input formControlName="first" [(ngModel)]="user.first" matInput placeholder="First Name" name="first">
+        <!--<mat-hint>Errors appear instantly!</mat-hint>-->
+        <!--<mat-error>{{getInputErrorMessage('phone')}}</mat-error>-->
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <input formControlName="last" [(ngModel)]="user.last" matInput placeholder="Last Name" name="last">
+        <!--<mat-hint>Errors appear instantly!</mat-hint>-->
+        <!--<mat-error>{{getInputErrorMessage('phone')}}</mat-error>-->
+      </mat-form-field>
 
       <div fxLayout="row" fxLayoutAlign="center center" >
         <button mat-raised-button [disabled]="!profileForm.valid">Save</button>

@@ -12,10 +12,13 @@ import { MatSnackBar }            from '@angular/material';
 })
 export class ProfileComponent implements OnInit {
   user;
-
+  user2;
+  user3;
   profileForm = new FormGroup({
     email: new FormControl('', []),
     phone: new FormControl('', []),
+    first: new FormControl('', []),
+    last: new FormControl('', []),
   });
 
   getInputErrorMessage(input_name:string){
@@ -35,11 +38,16 @@ export class ProfileComponent implements OnInit {
   constructor(private util:UtilService, private userService:UserService, public snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    this.user = User.Auth();
+    this.user  = User.Auth();
+
+    this.user.onSave(()=>{
+      console.log('saved');
+    })
   }
 
 
   async onSubmit(){
+    // console.log('user', this.user);
     let err, res;
     [err, res] = await this.util.to(this.user.saveAPI());
 
@@ -52,7 +60,6 @@ export class ProfileComponent implements OnInit {
         this.throwInputError('email', err.message);
       }
 
-      console.log('err', err);
       if(err.message == 'Nothing Updated') this.snackBar.open('User', 'Nothing to Update', {duration: 2000});
 
       return;

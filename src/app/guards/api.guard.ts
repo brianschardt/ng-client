@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate} from '@angular/router';
+import { User }       from './../models/user.model';
 // import { Observable } from 'rxjs/Observable';
 import { UserService } from './../services/user.service';
 import { UtilService } from './../services/util.service';
@@ -7,7 +8,7 @@ import { UtilService } from './../services/util.service';
 export class ApiGuard implements CanActivate {
   constructor(private userService: UserService, private utilService: UtilService){}
   canActivate(): boolean {
-    if(this.userService.loggedIn()){
+    if(User.Auth()){
       return true;
     }else{
       this.utilService.route('/home');

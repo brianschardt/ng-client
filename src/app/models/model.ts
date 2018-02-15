@@ -6,8 +6,8 @@ export class Model{
   public static all_data:Array<object>;
   public static SCHEMA:Object;
 
-  constructor(){
-
+  constructor(obj_data:any){
+    (<any>Object).assign(this, obj_data);
   }
 
   getModelName(){
@@ -36,22 +36,38 @@ export class Model{
   uniqueIdName(){
     return (this.constructor as any).getPrimaryKey();
   }
+
+  uniqueId(){
+    let unique_name = this.uniqueIdName();
+    return (<any> this)[unique_name];
+  }
+
   save(){
     let query_obj = this.uniqueQueryIdentifier();
     let update_object = this.toObject();
-    (this.constructor as any).updateOne(query_obj, update_object);
+    (this.constructor as any).findOneAndUpdate(query_obj, update_object, {upsert:true});
+    this.emitEvent(['save']);
     // return (this.constructor as any).instantiateObject(update_object);
   }
 
   remove(){
     let query_obj = this.uniqueQueryIdentifier();
+    (this.constructor as any).removeInstance(query_obj);
     (this.constructor as any).remove(query_obj);
+    this.emitEvent(['remove']);
+  }
+
+  reload(){//updates instance storage from browser data
+    let model = (this.constructor as any).findById(this.uniqueId(), true);
+    let obj = model.toObject();
+    (<any>Object).assign(this, obj);
+    this.emitEvent(['reload']);
   }
 
   getStorageValues(){
     let name:any = this.uniqueIdName();
     let id:any = (<any> this)[name];
-    return (this.constructor as any).findById(id).toObject();
+    return (this.constructor as any).findById(id, true).toObject();
   }
 
   getInstanceValues(){
@@ -59,7 +75,9 @@ export class Model{
   }
 
   getPropertyDifferences(){
-    return (this.constructor as any).difference(this.getStorageValues(), this.getInstanceValues());
+    let instance = this.getInstanceValues();
+    let storage = this.getStorageValues();
+    return (this.constructor as any).difference(instance, storage);
   }
 
   storageDifference(){
@@ -83,7 +101,12 @@ export class Model{
 
     return instance_differences;
   }
-  //Static
+
+  //**************************************************
+  //*********** STATIC *******************************
+  //**************************************************
+  static _instances: Array<Model> = [];
+
   static describe(): Array<string> {
     let properties = Object.getOwnPropertyNames(this);
     properties = properties.splice(3);
@@ -110,6 +133,8 @@ export class Model{
   static removeAllData(){
     let model_name = this.getModelName();
     this.removeLocalStorage(model_name);
+    this._instances = [];
+    this.emitEvent(['delete']);
   }
 
   static setAllData(data: Array<Object>){
@@ -158,19 +183,34 @@ export class Model{
     for ( let key in schema){
       if(data[key]){
         new_data[key] = data[key]
+      }else{
+        new_data[key] = '';
       }
     }
 
     return new_data
   }
 
-  static instantiateObject(obj_data:any){
-    let obj =  new this();
-    (<any>Object).assign(obj, obj_data);
+  //singe means that this object does not share a data reference to anywhere else
+  static instantiateObject(obj_data:any, single?:boolean){//this gets it so the object has the same reference and thus data in components
+    let obj:any
+    if(typeof single !== "undefined" && single === true){
+      obj =  new this(obj_data);
+      return obj
+    }
+
+    let primary_key = this.getPrimaryKey();
+    obj = this._instances.filter((instance:any)=>instance[primary_key] === obj_data[primary_key])[0];
+
+    if(!obj){
+      obj =  new this(obj_data);
+      this._instances.push(obj);
+    }
+
     return obj
   }
 
-  static create(data:any){
+  static create(data:any, single?:boolean){
     let old_data: Array<Object> = this.getAllData();
 
     let instance = this.schemaValidate(data);
@@ -187,18 +227,33 @@ export class Model{
 
     old_data.push(instance);
     this.setAllData(old_data);
-    let inst_obj = this.instantiateObject(instance);
+    let inst_obj = this.instantiateObject(instance, single);
+
+    this.emitEvent(['create']);
     return inst_obj;
   }
 
 
-  static remove(search:object){
+  static removeInstance(search:object){//Removes instance from the app storage
+    this._instances = this._instances.filter(instance=>{
+      let obj = instance.toObject();
+      return !_.isMatch(obj, search)
+    })
+  }
+
+
+  static removeStorage(search:object){//Removes instance from browser storage
     let all_data = this.getAllData();
     let new_data = all_data.filter((data:object)=>{ return !_.isMatch(data, search)});
     this.setAllData(new_data);
   }
 
-  static update(search:object, new_data?:any){
+  static remove(search:object){
+    this.removeStorage(search);
+    this._change.forEach((listener: any) => listener());
+  }
+
+  static update(search:object, new_data?:any, single?:boolean){
     let all_data = this.getAllData();
     let instances = all_data.filter((data:object)=>{ return _.isMatch(data, search)});
     if(!instances){
@@ -211,12 +266,12 @@ export class Model{
       for (let o in new_data){
         instance[o] = new_data[o]
       }
-      this.create(instance);
+      this.create(instance, single);
     }
 
   }
 
-  static updateOne(search:object, new_data:any){
+  static updateOne(search:object, new_data:any, single?:boolean){
     let all_data:any = this.getAllData();
     let instance:any = all_data.filter((data:any)=>{ return _.isMatch(data, search)})[0];
     if(!instance){
@@ -226,10 +281,10 @@ export class Model{
     for (let o in new_data){
       instance[o] = new_data[o]
     }
-    return this.create(instance);
+    return this.create(instance, single);
   }
 
-  static findOne(search?:object){
+  static findOne(search?:object, single?:boolean){
     let all_data = this.getAllData();
     let instance;
     if(!search){
@@ -239,18 +294,18 @@ export class Model{
     }
     if(typeof instance === 'undefined' || !instance) return null;
 
-    instance = this.instantiateObject(instance)
+    instance = this.instantiateObject(instance, single)
     return instance;
   }
 
-  static find(search:object){
+  static find(search:object, single?:boolean){
     let all_data = this.getAllData();
     let instances = all_data.filter((data:object)=>{ return _.isMatch(data, search);});
     let final_objs = instances;
     let array = []
     for (let i in final_objs){
       let instance = final_objs[i];
-      instance = this.instantiateObject(instance)
+      instance = this.instantiateObject(instance, single)
       array.push(instance);
     }
 
@@ -265,30 +320,137 @@ export class Model{
     if(!instance){
       if(typeof options === 'object' && options.upsert === true){
         if(_.isEmpty(data)){
-          final_obj = this.create(search);
+          final_obj = this.create(search, options.single);
         }else{
-          final_obj = this.create(data);
+          final_obj = this.create(data, options.single);
         }
       }else{
         null;
       }
     }else{
-      final_obj = this.updateOne(search, data)
+      final_obj = this.updateOne(search, data, options.single)
     }
     return final_obj;
   }
 
-  static findById(id:string){
+  static findById(id:string, single?:boolean){
     let primary_key:any = this.getPrimaryKey();
     let obj:any = {};
     obj[primary_key] = id;
-    return this.findOne(obj);
+    return this.findOne(obj, single);
   }
 
   static difference(a:any, b:any){
-    return _.reduce(a, function(result:any, value:any, key:any) {
+    let diff =  _.reduce(a, function(result:any, value:any, key:any) {
       return _.isEqual(value, b[key]) ?
         result : result.concat(key);
     }, []);
+    return diff;
+  }
+
+  //Global Model Events
+  static _create:any = [];
+  static _delete:any = [];
+  static _update:any = [];
+  static _change:any = [];
+
+  static onCreate(listener:any){
+    this._create.push(listener);
+    return ()=>{
+      this._create = this._create.filter((l:any) => l !== listener)
+    }
+  }
+
+  static onDelete(listener:any){
+    this._delete.push(listener);
+    return ()=>{
+      this._delete = this._delete.filter((l:any) => l !== listener)
+    }
+  }
+
+  static onUpdate(listener:any){
+    this._update.push(listener);
+    return ()=>{
+      this._update = this._update.filter((l:any) => l !== listener)
+    }
+  }
+
+  static onChange(listener:any){
+    this._change.push(listener);
+    return ()=>{
+      this._change = this._change.filter((l:any) => l !== listener)
+    }
+  }
+
+  static emitEvent(array:Array<string>){
+    for ( let i in array){
+      let kind = array[i];
+      switch (kind){
+        case 'create':
+          this._create.forEach((listener: any) => listener());
+          this._change.forEach((listener: any) => listener());
+          break;
+        case 'update':
+          this._update.forEach((listener: any) => listener());
+          this._change.forEach((listener: any) => listener());
+          break;
+        case 'delete':
+          this._delete.forEach((listener: any) => listener());
+          this._change.forEach((listener: any) => listener());
+          break;
+      }
+    }
+  }
+
+  //Instance Model Events
+  //Global Model Events
+  _save  :any = [];
+  _remove:any = [];
+  _reload:any = [];
+  _change:any = [];
+
+  onSave(listener:any){
+    console.log('on save listener working')
+    this._save.push(listener);
+    return ()=>{
+      this._save = this._save.filter((l:any) => l !== listener)
+    }
+  }
+
+  onRemove(listener:any){
+    this._remove.push(listener);
+    return ()=>{
+      this._remove = this._remove.filter((l:any) => l !== listener)
+    }
+  }
+
+  onReload(listener:any){
+    this._reload.push(listener);
+    return ()=>{
+      this._reload = this._reload.filter((l:any) => l !== listener)
+    }
+  }
+
+  onChange(listener:any){
+    this._change.push(listener);
+  }
+
+  emitEvent(array:Array<string>){
+    for ( let i in array){
+      let kind = array[i];
+      switch (kind){
+        case 'save':
+          this._save.forEach((listener: any)   => listener());
+          this._change.forEach((listener: any) => listener());
+          break;
+        case 'remove':
+          this._remove.forEach((listener: any) => listener());
+          this._change.forEach((listener: any) => listener());
+          break;
+        case 'reload':
+          this._reload.forEach((listener: any) => listener());
+          break;
+      }
+    }
   }
 }

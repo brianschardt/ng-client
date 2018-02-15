@@ -1,11 +1,12 @@
 import { Model }            from 'bamfstore';
-// import { Model }           from './model';
+// import { Model }            from './model';
 import { UtilService }      from './../services/util.service';
 import { AppInjector }      from './../app.module';
 import * as _               from 'underscore';
+import {Observable}         from "rxjs/Observable";
 
 export class User extends Model {
-  apiUpdateValues:Array<string> = ['email', 'phone'];//these are the values that will be sent to the API
+  apiUpdateValues:Array<string> = ['email', 'phone', 'first', 'last'];//these are the values that will be sent to the API
 
   first;
   last;
@@ -14,7 +15,6 @@ export class User extends Model {
   email;
   phone;
 
-  // public util: UtilService = new UtilService;
   static SCHEMA = {
     _id:{type:'string', primary:true},
     first:{type:'string'},
@@ -26,12 +26,11 @@ export class User extends Model {
   };
 
   util;
-  constructor(){
-    super();
+  constructor(obj:object){
+    super(obj);
     //this is the only maintainable way for model to use outside services
     //this is what causes the ciurcular dependency warning, however this will not cause any errors
     this.util        = AppInjector.get(UtilService); //https://stackoverflow.com/questions/39101865/angular-2-inject-dependency-outside-constructor
-    // this.userService = AppInjector.get(UserService);
   }
 
   fullname(){
@@ -45,6 +44,7 @@ export class User extends Model {
 
   logout(){
     this.remove();
+    this.util.route('/home');
   }
 
   async saveAPI(){

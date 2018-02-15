@@ -9,15 +9,19 @@ import { User } from './../../../models/user.model';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  user:User;
-  constructor(public util:UtilService, public userService:UserService) { }
+  user:User ;
+  constructor(public util:UtilService, public userService:UserService) {
+  }
 
   ngOnInit() {
-    this.user = <User> this.userService.user;
+    User.onChange(()=>{
+      this.user = User.Auth();
+    });
+
   }
 
   onLogout(){
-    this.userService.logout()
+    if(this.user) this.user.logout();
   }
 
 }

@@ -19,7 +19,7 @@ import { CookieService } from 'ngx-cookie-service';
 
 //models
 import { User } from './models/user.model';
-import { Model } from './models/model';
+// import { Model } from './models/model';
 //guards
 import { ApiGuard } from './guards/api.guard';
 
@@ -71,7 +71,6 @@ import { ProfileComponent } from './components/user/profile/profile.component';
     EnvService,
     CookieService,
     ApiGuard,
-    User
   ],
   bootstrap: [AppComponent],
 })
