@@ -1,4 +1,4 @@
-import { Model }            from 'bamfstore';
+import { Model }            from 'browser-model';
 // import { Model }            from './model';
 import { UtilService }      from './../services/util.service';
 import { AppInjector }      from './../app.module';
@@ -39,7 +39,7 @@ export class User extends Model {
     this.last = split[1];
   }
 
-  get full_name{
+  get full_name {
     let full_name = '';
     if(this.first) full_name = `${full_name}${this.first}`;
     if(this.last) full_name = `${full_name} ${this.last}`;
