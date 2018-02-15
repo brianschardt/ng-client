@@ -1,4 +1,4 @@
-import * as _ from 'underscore';
+import * as _ from 'browser-model';
 
 export class Model{
 
