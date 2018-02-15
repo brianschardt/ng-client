@@ -45,6 +45,9 @@ export class ProfileComponent implements OnInit {
     })
   }
 
+  ngOnDestroy(){
+    this.user.reload(); //makes sure if values arent saved other components arent updated
+  }
 
   async onSubmit(){
     // console.log('user', this.user);
