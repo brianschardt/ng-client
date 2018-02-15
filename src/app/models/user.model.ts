@@ -33,8 +33,17 @@ export class User extends Model {
     this.util        = AppInjector.get(UtilService); //https://stackoverflow.com/questions/39101865/angular-2-inject-dependency-outside-constructor
   }
 
-  fullname(){
-    return this.first + ' ' + this.last;
+  set full_name(name:string){
+    let split = name.split(' ');
+    this.first = split[0];
+    this.last = split[1];
+  }
+
+  get full_name{
+    let full_name = '';
+    if(this.first) full_name = `${full_name}${this.first}`;
+    if(this.last) full_name = `${full_name} ${this.last}`;
+    return full_name;
   }
 
   static Auth(){

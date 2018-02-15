@@ -28,6 +28,12 @@
         <!--<mat-error>{{getInputErrorMessage('phone')}}</mat-error>-->
       </mat-form-field>
 
+      <mat-form-field class="full-width">
+        <input formControlName="full_name" [(ngModel)]="user.full_name" matInput placeholder="Full Name" name="full">
+        <!--<mat-hint>Errors appear instantly!</mat-hint>-->
+        <!--<mat-error>{{getInputErrorMessage('phone')}}</mat-error>-->
+      </mat-form-field>
+
       <div fxLayout="row" fxLayoutAlign="center center" >
         <button mat-raised-button [disabled]="!profileForm.valid">Save</button>
       </div>

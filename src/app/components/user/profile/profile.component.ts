@@ -18,6 +18,7 @@ export class ProfileComponent implements OnInit {
     phone: new FormControl('', []),
     first: new FormControl('', []),
     last: new FormControl('', []),
+    full_name: new FormControl('', []),
   });
 
   getInputErrorMessage(input_name:string){
