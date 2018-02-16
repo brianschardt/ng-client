@@ -1,7 +1,6 @@
 import { Component, OnInit }      from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { UtilService }            from "../../../services/util.service";
-import { UserService }            from './../../../services/user.service';
 import { User }                   from './../../../models/user.model';
 import { MatSnackBar }            from '@angular/material';
 
@@ -35,7 +34,7 @@ export class ProfileComponent implements OnInit {
     this.profileForm.get(input_name).setErrors({custom: message});
   }
 
-  constructor(private util:UtilService, private userService:UserService, public snackBar: MatSnackBar) { }
+  constructor(private util:UtilService, public snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.user  = User.Auth();

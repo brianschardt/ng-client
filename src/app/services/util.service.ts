@@ -6,13 +6,20 @@ import { CookieService }    from 'ngx-cookie-service';
 import * as pe              from 'parse-error';
 import { environment }      from '../../environments/environment';
 import { User }             from './../models/user.model';
+import { FacebookService, InitParams, LoginOptions } from 'ngx-facebook';
 
 @Injectable()
 export class UtilService {
   env:any;
 
-  constructor(private router: Router, private http: Http, private cookieService:CookieService, private envService:EnvService) {
+  constructor(private router: Router, private http: Http, private cookieService:CookieService, private envService:EnvService, public fb: FacebookService) {
     this.env = this.envService;
+    let initParams: InitParams = {
+      appId: this.env.facebook_app_id,
+      xfbml: true,
+      version: 'v2.8'
+    };
+    this.fb.init(initParams);
   }
   use(){
     console.log('using util service');

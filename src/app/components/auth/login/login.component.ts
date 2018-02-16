@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UtilService } from "../../../services/util.service";
-import { UserService } from './../../../services/user.service';
+import { User } from './../../../models/user.model';
 
 export interface UserLoginInfo {
   unique:string,
@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit {
   user_info:UserLoginInfo = <UserLoginInfo>{ };
   title:string = 'Login / Register';
   register:boolean = false;
+  user:any;
 
   loginForm = new FormGroup({
     unique: new FormControl('', [Validators.required]),
@@ -45,7 +46,7 @@ export class LoginComponent implements OnInit {
     this.loginForm.get(input_name).setErrors({custom: message});
   }
 
-  constructor(private util:UtilService, private userService:UserService) { }
+  constructor(private util:UtilService) { }
 
   ngOnInit() {
 
@@ -69,10 +70,9 @@ export class LoginComponent implements OnInit {
   }
 
   async login(data: Object){
-    var err, res:any;
-    [err, res] = await this.util.to(this.userService.loginReg(data));
+    var err;
+    [err, this.user] = await this.util.to(User.LoginReg(data));
     if(err){
-      console.log('asdfas', err)
       if(err.message.includes('password') || err.message.includes('Password')){
         this.throwInputError('password', err.message);
       }else if(err.message === 'Not registered'){
@@ -97,8 +97,8 @@ export class LoginComponent implements OnInit {
       return
     }
 
-    let err, res;
-    [err, res] = await this.util.to(this.userService.createAccount(data))
+    let err;
+    [err, this.user] = await this.util.to(User.CreateAccount(data))
 
     if(err) this.util.TE(err);
 

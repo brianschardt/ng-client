@@ -14,7 +14,6 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 //services
 import { EnvService } from './services/env.service';
 import { UtilService } from './services/util.service';
-import { UserService } from './services/user.service';
 import { CookieService } from 'ngx-cookie-service';
 
 //models
@@ -67,7 +66,6 @@ import { ProfileComponent } from './components/user/profile/profile.component';
   ],
   providers: [
     UtilService,
-    UserService,
     EnvService,
     CookieService,
     ApiGuard,

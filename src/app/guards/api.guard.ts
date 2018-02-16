@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { CanActivate} from '@angular/router';
 import { User }       from './../models/user.model';
-// import { Observable } from 'rxjs/Observable';
-import { UserService } from './../services/user.service';
 import { UtilService } from './../services/util.service';
+
 @Injectable()
 export class ApiGuard implements CanActivate {
-  constructor(private userService: UserService, private utilService: UtilService){}
+  constructor(private utilService: UtilService){}
   canActivate(): boolean {
     if(User.Auth()){
       return true;

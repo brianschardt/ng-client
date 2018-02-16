@@ -3,6 +3,10 @@ import { Model }            from 'browser-model';
 import { UtilService }      from './../services/util.service';
 import { AppInjector }      from './../app.module';
 import * as _               from 'underscore';
+import { LoginOptions } from 'ngx-facebook';
+
+//interfaces
+import { LoginInfo }      from './../interfaces/login-info';
 
 export class User extends Model {
   apiUpdateValues:Array<string> = ['email', 'phone', 'first', 'last'];//these are the values that will be sent to the API
@@ -15,7 +19,7 @@ export class User extends Model {
   phone;
 
   static SCHEMA = {
-    _id:{type:'string', primary:true},
+    _id:{type:'string', primary:true},//this means every time you make a new object you must give it a _id
     first:{type:'string'},
     last:{type:'string'},
     email:{type:'string'},
@@ -48,12 +52,7 @@ export class User extends Model {
   logout(){
     this.remove();
     this.util.route('/home');
-    User.emit(['logout', 'auth'], 'logout');
-  }
-
-  static Auth(){
-    let user:User = <User> this.findOne({auth:true});
-    return user;
+    this.emit(['logout', 'auth'], 'logout', true);
   }
 
   async saveAPI(){
@@ -76,4 +75,108 @@ export class User extends Model {
     this.emit('saveApi', update_data, true);
     this.save();
   }
+
+
+  //************************************
+  //********* STATIC METHODS ***********
+  //************************************
+
+  static get util(){
+    return AppInjector.get(UtilService);
+  }
+
+  static get fb(){
+    return this.util.fb;
+  }
+
+  static Auth(){
+    let user:User = <User> this.findOne({auth:true});
+    return user;
+  }
+
+  static Login(info: LoginInfo){
+    // this.setAuthToken(info.token);
+    info.user.auth = true;
+    info.user.token = info.token;
+    let user = <User> User.create(info.user);
+    user.emit(['login', 'auth'], 'login', true);
+    return user;
+  }
+
+  static async LoginReg(data: Object){
+    let res:any;
+    let err;
+    [err, res] = await this.util.to(this.util.post('/v1/users/login', data));
+
+    if(err) this.util.TE(err, true);
+
+    if(!res.success) this.util.TE(res.error, true);
+
+    var login_info: LoginInfo = {
+      token: res.token,
+      user: res.user,
+    };
+
+    let user = this.Login(login_info);
+    return user;
+  }
+
+  static async CreateAccount(data:Object){
+    let err, res:any;
+    [err, res] = await this.util.to(this.util.post('/v1/users', data));
+
+    if(err) this.util.TE(err, true);
+    if(!res.success) this.util.TE(res.error, true);
+
+    var login_info: LoginInfo = {
+      token: res.token,
+      user: res.user,
+    };
+
+    let user = this.Login(login_info);
+    return user;
+  }
+
+  static async LoginSocial(service: String){
+    let err, res;
+    let login_info: LoginInfo
+    switch(service){
+      case 'facebook':
+        // const scopes = 'public_profile,user_friends,email,pages_show_list';
+        const scopes = 'public_profile,user_friends,email,user_birthday';
+        const loginOptions: LoginOptions = {
+          enable_profile_selector: true,
+          return_scopes: true,
+          scope: scopes
+        };
+        [err, res] = await this.util.to(this.fb.login(loginOptions));
+
+        let a_res = res.authResponse;
+        [err, res] = await this.util.to(this.fb.api('/me'+'?fields=id,name,picture,email,birthday,gender,age_range,devices,location,first_name,last_name,website'));
+        [err ,res] = await this.util.to(this.util.post('/v1/social-auth/facebook', {auth_response:a_res, user_info:res}));
+
+        if(res.success == false){
+          err = res.error
+        }
+        if(err) this.util.TE(err, true);
+        login_info = {
+          token:res.token,
+          user:res.user
+        }
+
+        break;
+      case  'google':
+        err = 'google login not setup';
+        break;
+      default:
+        err = 'no auth login service selected';
+        break;
+    }
+
+    if(!err){
+      this.Login(login_info);
+    }
+    return login_info
+  }
+
 }

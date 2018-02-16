@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { UtilService } from './../../../services/util.service';
-import { UserService } from './../../../services/user.service';
 import { User } from './../../../models/user.model';
 
 @Component({
@@ -11,19 +10,18 @@ import { User } from './../../../models/user.model';
 })
 export class NavbarComponent implements OnInit {
   user:User ;
-  constructor(public util:UtilService, public userService:UserService, private cd:ChangeDetectorRef) {
+  constructor(public util:UtilService, private cd:ChangeDetectorRef) {
   }
 
   ngOnInit() {
     this.user = User.Auth();
 
-    //I am specifically over complicating this here to show how useful this can become in a large app
+    //I am intentionally over complicating this here to show how useful this can become in a large app
     User.on(['auth', 'saveApi'], (auth_state)=>{//data will be different depending on which event was emitted
       console.log('the user has:', auth_state);
-
+      this.user = User.Auth();
       //we can dynamically make the view check on cvertain events. For large apps this is very efficient
       this.cd.markForCheck();//this makes the view check for updates once
-      this.user = User.Auth();
     });
 
   }

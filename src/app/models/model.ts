@@ -228,6 +228,15 @@ export class Model{
       instance[primary_key] = id;
     }
 
+    let check = old_data.filter((m:any)=>m[primary_key] === instance[primary_key])[0];
+    if(check) {
+      throw Error(`Duplicate key in ${this.getModelName()} model, key: ${primary_key} value: ${instance[primary_key]}`);
+    }//means there is already an object with this primary key
+
+    if(!instance[primary_key] || instance[primary_key] == ''){
+      throw Error(`No key given in ${this.getModelName()} model, key: ${primary_key} value: ${instance[primary_key]}`);
+    }
+
     old_data.push(instance);
     this.setAllData(old_data);
     let inst_obj = this.instantiateObject(instance, single);
