@@ -51,6 +51,7 @@ export class UserService {
     info.user.auth = true;
     info.user.token = info.token;
     this.user = <User> User.create(info.user);
+    User.emit(['login', 'auth'], 'login');
     return this.user;
   }
 

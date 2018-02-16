@@ -49,6 +49,7 @@ export class User extends Model {
   logout(){
     this.remove();
     this.util.route('/home');
+    User.emit(['logout', 'auth'], 'logout');
   }
 
   static Auth(){
@@ -73,6 +74,7 @@ export class User extends Model {
     if(err) this.util.TE(err, true);
     if(!res.success) this.util.TE(res.error, true);
 
+    this.emit('saveApi', update_data);
     this.save();
   }
 

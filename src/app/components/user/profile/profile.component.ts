@@ -40,8 +40,9 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
     this.user  = User.Auth();
 
-    this.user.onSave(()=>{
-      console.log('saved');
+
+    this.user.on(['saveApi', 'save'], ()=>{
+      console.log('saved to api')
     })
   }
 
@@ -67,6 +68,7 @@ export class ProfileComponent implements OnInit {
 
       return;
     }
+
 
     this.snackBar.open('User', 'Successfully Updated', {duration: 2000});
 

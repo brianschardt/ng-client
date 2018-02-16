@@ -17,7 +17,8 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     this.user = User.Auth();
 
-    User.onChange(()=>{
+    User.on('auth', (auth_state)=>{
+      console.log('the user has:', auth_state)
       this.cd.markForCheck();//this updates the data on the component
       this.user = User.Auth();
     });
