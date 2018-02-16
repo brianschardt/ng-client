@@ -435,23 +435,29 @@ export class Model{
 
   onChange(listener:any){
     this._change.push(listener);
+    return ()=>{
+      this._change = this._change.filter((l:any) => l !== listener)
+    }
   }
 
-  on(event_name:string, callback?:any){
+  on(event_name:string, callback?:Function){
+    let ret:any;
     switch(event_name){
       case 'save':
-        return this.onSave(callback);
+        ret = this.onSave(callback);
         break;
       case 'remove':
-        return this.onRemove(callback);
+        ret = this.onRemove(callback);
         break;
       case 'reload':
-        return this.onReload(callback);
+        ret = this.onReload(callback);
         break;
       case 'change':
-        return this.onChange(callback);
+        ret = this.onChange(callback);
         break;
     }
+
+    return ret;
   }
   emitEvent(array:Array<string>){
     for ( let i in array){
@@ -472,3 +478,4 @@ export class Model{
     }
   }
 }
+
