@@ -173,10 +173,11 @@ export class User extends Model {
         break;
     }
 
-    if(!err){
-      this.Login(login_info);
-    }
-    return login_info
+    let user;
+    if(!err) user = this.Login(login_info);
+
+    if(!user) this.util.TE('Error loggin user in', true);
+    return user
   }
 
 }
