@@ -73,7 +73,7 @@ export class User extends Model {
     if(err) this.util.TE(err, true);
     if(!res.success) this.util.TE(res.error, true);
 
-    this.emit('userSaveApi', update_data, true);
+    this.emit('saveApi', update_data, true);
     this.save();
   }
 }

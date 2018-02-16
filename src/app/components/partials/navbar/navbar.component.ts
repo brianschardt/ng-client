@@ -18,9 +18,9 @@ export class NavbarComponent implements OnInit {
     this.user = User.Auth();
 
     //I am specifically over complicating this here to show the power of this
-    User.on(['auth', 'userSaveApi'], (auth_state)=>{
+    User.on(['auth', 'saveApi'], (auth_state)=>{
       console.log('the user has:', auth_state);
-      
+
       //we can dynamically make the view check on cvertain events. For large apps this is very efficient
       this.cd.markForCheck();//this makes the view check for updates once
       this.user = User.Auth();
