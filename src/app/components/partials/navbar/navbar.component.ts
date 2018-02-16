@@ -17,8 +17,8 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     this.user = User.Auth();
 
-    //I am specifically over complicating this here to show the power of this
-    User.on(['auth', 'saveApi'], (auth_state)=>{
+    //I am specifically over complicating this here to show how useful this can become in a large app
+    User.on(['auth', 'saveApi'], (auth_state)=>{//data will be different depending on which event was emitted
       console.log('the user has:', auth_state);
 
       //we can dynamically make the view check on cvertain events. For large apps this is very efficient
