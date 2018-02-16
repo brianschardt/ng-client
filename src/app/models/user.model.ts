@@ -3,7 +3,6 @@ import { Model }            from 'browser-model';
 import { UtilService }      from './../services/util.service';
 import { AppInjector }      from './../app.module';
 import * as _               from 'underscore';
-import {Observable}         from "rxjs/Observable";
 
 export class User extends Model {
   apiUpdateValues:Array<string> = ['email', 'phone', 'first', 'last'];//these are the values that will be sent to the API
@@ -74,9 +73,7 @@ export class User extends Model {
     if(err) this.util.TE(err, true);
     if(!res.success) this.util.TE(res.error, true);
 
-    this.emit('saveApi', update_data);
+    this.emit('userSaveApi', update_data, true);
     this.save();
   }
-
-
 }

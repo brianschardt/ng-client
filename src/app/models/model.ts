@@ -11,7 +11,7 @@ export class Model{
   }
 
   getModelName(){
-    return (this.constructor as any).getModelName();
+    return this.static.getModelName();
   }
 
 
@@ -27,14 +27,14 @@ export class Model{
   }
 
   uniqueQueryIdentifier(){
-    let primary_id = (this.constructor as any).getPrimaryKey();
+    let primary_id = this.static.getPrimaryKey();
     let query_obj:any = {};
     query_obj[primary_id] = (<any> this)[primary_id];
     return query_obj;
   }
 
   uniqueIdName(){
-    return (this.constructor as any).getPrimaryKey();
+    return this.static.getPrimaryKey();
   }
 
   uniqueId(){
@@ -45,20 +45,20 @@ export class Model{
   save(){
     let query_obj = this.uniqueQueryIdentifier();
     let update_object = this.toObject();
-    (this.constructor as any).findOneAndUpdate(query_obj, update_object, {upsert:true});
+    this.static.findOneAndUpdate(query_obj, update_object, {upsert:true});
     this.emit(['save', 'change']);
     // return (this.constructor as any).instantiateObject(update_object);
   }
 
   remove(){
     let query_obj = this.uniqueQueryIdentifier();
-    (this.constructor as any).remove(query_obj);
-    (this.constructor as any).removeInstance(query_obj);
+    this.static.remove(query_obj);
+    this.static.removeInstance(query_obj);
     this.emit(['remove', 'change']);
   }
 
   reload(){//updates instance storage from browser data
-    let model = (this.constructor as any).findById(this.uniqueId(), true);
+    let model = this.static.findById(this.uniqueId(), true);
     let obj = model.toObject();
     (<any>Object).assign(this, obj);
     this.emit(['reload', 'change']);
@@ -67,7 +67,7 @@ export class Model{
   getStorageValues(){
     let name:any = this.uniqueIdName();
     let id:any = (<any> this)[name];
-    return (this.constructor as any).findById(id, true).toObject();
+    return this.static.findById(id, true).toObject();
   }
 
   getInstanceValues(){
@@ -77,9 +77,12 @@ export class Model{
   getPropertyDifferences(){
     let instance = this.getInstanceValues();
     let storage = this.getStorageValues();
-    return (this.constructor as any).difference(instance, storage);
+    return this.static.difference(instance, storage);
   }
 
+  get static(){
+    return (this.constructor as any);
+  }
   storageDifference(){
     let diff = this.getPropertyDifferences();
     let storage = this.getStorageValues();
@@ -415,7 +418,7 @@ export class Model{
     }
   }
 
-  emit(events:any, data?:any){
+  emit(events:any, data?:any, toStatic?:boolean){
     if(typeof events === 'string'){
       let event_listeners = this._events[events];
       if(event_listeners) event_listeners.forEach((listener: any) => listener(data));
@@ -426,6 +429,7 @@ export class Model{
         if(event_listeners) event_listeners.forEach((listener: any) => listener(data));
       }
     }
-  }
 
+    if(toStatic) this.static.emit(events, data); //this will send it to the whole class events
+  }
 }
