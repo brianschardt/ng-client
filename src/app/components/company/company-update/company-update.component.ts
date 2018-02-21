@@ -23,7 +23,7 @@ export class CompanyUpdateComponent implements OnInit {
 
   getInputErrorMessage(input_name:string){
     var err_message:string = '';
-    if(this.companyForm.get(input_name).hasError('required')) err_message = 'You must enter an Email or Phone number.';
+    if(this.companyForm.get(input_name).hasError('required')) err_message = 'You must enter a name for the company.';
     if(this.companyForm.get(input_name).hasError('custom')) {
       err_message = this.companyForm.get(input_name).getError('custom');
     }
@@ -50,5 +50,17 @@ export class CompanyUpdateComponent implements OnInit {
     }
 
     this.snackBar.open('Company', 'Successfully updated', {duration: 2000});
+  }
+
+  async onDelete(){
+    let err, res;
+    [err, res] = await Util.to(this.company.removeAPI());
+    if(err){
+      console.log(err, 'err')
+      if(err.message == 'Nothing Updated') this.snackBar.open('Company', 'Nothing to Update', {duration: 2000});
+      return;
+    }
+
+    return Company.to('list');
   }
 }

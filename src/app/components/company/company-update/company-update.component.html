@@ -21,5 +21,11 @@
         <button mat-raised-button [disabled]="!companyForm.valid">Update</button>
       </div>
     </form>
+
+    <div fxLayoutAlign="end">
+      <button mat-button (click)="onDelete()">delete</button>
+    </div>
+
+
   </mat-card>
 </div>

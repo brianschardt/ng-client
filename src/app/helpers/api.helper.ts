@@ -1,4 +1,3 @@
-import { UtilService }      from './../services/util.service';
 import { AppInjector }      from './../app.module';
 import * as _               from 'underscore';
 import { LoginOptions }     from 'ngx-facebook';
@@ -13,10 +12,6 @@ export class API {
   //************************************
   //********* STATIC METHODS ***********
   //************************************
-
-  static get util(){
-    return AppInjector.get(UtilService);
-  }
 
   static async save(model, uri:string, update_data?:any){
     let err, res:any;
@@ -35,6 +30,18 @@ export class API {
 
     model.emit('saveApi', update_data, true);
     model.save();
+    return true;
+  }
+
+  static async remove(model, uri:string){
+    let err, res:any;
+
+    [err, res] = await Util.to(Util.delete(uri));
+
+    if(err) Util.TE(err, true);
+
+    model.emit('removeApi', {}, true);
+    model.remove();
     return true;
   }
 

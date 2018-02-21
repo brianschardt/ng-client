@@ -22,6 +22,7 @@ html *
   font-weight: 100;
 }
 a {
+  cursor: pointer;
   text-decoration: none !important;
 }
 

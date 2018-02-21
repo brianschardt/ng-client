@@ -33,7 +33,15 @@ export class Company extends Model {
     return API.save(this, '/v1/companies/'+this._id);
   }
 
+  async removeAPI(){
+    return API.remove(this, '/v1/companies/'+this._id);
+  }
+
   //Static
+
+  static to(action){
+    return Util.route('/company/'+action);
+  }
 
   static async getAllAuthCompanies(){
     let err, res;
