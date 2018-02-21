@@ -68,7 +68,7 @@ export class User extends Model {
   //************************************
   //********* STATIC METHODS ***********
   //************************************
-  
+
 
   static get fb(){
     // return Util.fb;

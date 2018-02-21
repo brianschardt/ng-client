@@ -12,7 +12,6 @@ import { FacebookModule } from 'ngx-facebook';
 
 import { FlexLayoutModule } from "@angular/flex-layout";
 //services
-import { EnvService } from './services/env.service';
 import { UtilService } from './services/util.service';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -72,7 +71,6 @@ import { CompanyUpdateComponent } from './components/company/company-update/comp
   ],
   providers: [
     UtilService,
-    EnvService,
     CookieService,
     ApiGuard,
   ],

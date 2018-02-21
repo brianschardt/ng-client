@@ -8,9 +8,11 @@ import { Util }          from "../../../helpers/util.helper";
 })
 export class FooterComponent implements OnInit {
   date:Number = new Date().getFullYear();
+  env;
   constructor() { }
 
   ngOnInit() {
+    this.env = Util.env;
   }
 
 }

@@ -3,8 +3,10 @@ import * as pe              from 'parse-error';
 import { Http, Headers }    from '@angular/http';
 import { environment }      from '../../environments/environment';
 import { User }             from './../models/user.model';
-import { FacebookService, InitParams, LoginOptions } from 'ngx-facebook';
+// import { FacebookService, InitParams, LoginOptions } from 'ngx-facebook';
 import { Router }           from '@angular/router';
+
+import { Env }              from './env.helper';
 
 export class Util {
 
@@ -25,6 +27,10 @@ export class Util {
   }
 
   //************************************
+
+  static get env(){
+    return Env;
+  }
 
   static getUrlParams(aroute:any){
     return new Promise(resolve=>{
