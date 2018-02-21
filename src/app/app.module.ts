@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { Injector } from '@angular/core';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { MatSnackBarModule, MatGridListModule, MatDividerModule, MatCardModule, MatButtonModule, MatSidenavModule, MatCheckboxModule, MatToolbarModule, MatMenuModule, MatIconModule, MatInputModule } from '@angular/material';
+import { MatDialogModule, MatSnackBarModule, MatGridListModule, MatDividerModule, MatCardModule, MatButtonModule, MatSidenavModule, MatCheckboxModule, MatToolbarModule, MatMenuModule, MatIconModule, MatInputModule } from '@angular/material';
 
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
@@ -32,6 +32,8 @@ import { ProfileComponent } from './components/user/profile/profile.component';
 import { CompanyCreateComponent } from './components/company/company-create/company-create.component';
 import { CompanyListComponent } from './components/company/company-list/company-list.component';
 import { CompanyUpdateComponent } from './components/company/company-update/company-update.component';
+import { DialogDefaultComponent } from './components/dialogs/dialog-default/dialog-default.component';
+import { DialogRemoveComponent } from './components/dialogs/dialog-remove/dialog-remove.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +47,8 @@ import { CompanyUpdateComponent } from './components/company/company-update/comp
     CompanyCreateComponent,
     CompanyListComponent,
     CompanyUpdateComponent,
+    DialogDefaultComponent,
+    DialogRemoveComponent,
 
   ],
   imports: [
@@ -67,7 +71,12 @@ import { CompanyUpdateComponent } from './components/company/company-update/comp
     MatDividerModule,
     MatCardModule,
     MatGridListModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDialogModule
+  ],
+  entryComponents: [
+    DialogDefaultComponent,
+    DialogRemoveComponent,
   ],
   providers: [
     UtilService,

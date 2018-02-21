@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
-import { Util } from "../../../helpers/util.helper";
-import { Company } from "./../../../models/company.model";
-import { User } from "./../../../models/user.model";
+import { Component, OnInit }      from '@angular/core';
+import { ActivatedRoute }         from "@angular/router";
+import { Util }                   from "../../../helpers/util.helper";
+import { Company }                from "./../../../models/company.model";
+import { User }                   from "./../../../models/user.model";
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar }            from '@angular/material';
 
@@ -54,13 +54,14 @@ export class CompanyUpdateComponent implements OnInit {
 
   async onDelete(){
     let err, res;
-    [err, res] = await Util.to(this.company.removeAPI());
-    if(err){
-      console.log(err, 'err')
-      if(err.message == 'Nothing Updated') this.snackBar.open('Company', 'Nothing to Update', {duration: 2000});
-      return;
-    }
-
-    return Company.to('list');
+    Util.openRemoveDialog();
+    // [err, res] = await Util.to(this.company.removeAPI());
+    // if(err){
+    //   console.log(err, 'err')
+    //   if(err.message == 'Nothing Updated') this.snackBar.open('Company', 'Nothing to Update', {duration: 2000});
+    //   return;
+    // }
+    //
+    // return Company.to('list');
   }
 }

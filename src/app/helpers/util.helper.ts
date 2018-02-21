@@ -8,10 +8,16 @@ import { Router }           from '@angular/router';
 
 import { Env }              from './env.helper';
 
+import { MatDialog }              from '@angular/material';
+import { DialogDefaultComponent } from './../components/dialogs/dialog-default/dialog-default.component';
+import { DialogRemoveComponent }  from './../components/dialogs/dialog-remove/dialog-remove.component';
+
+
 export class Util {
 
   constructor(){
   }
+
 
 
   //************************************
@@ -26,7 +32,29 @@ export class Util {
     return AppInjector.get(Http);
   }
 
+  static get dialog(){
+    return AppInjector.get( MatDialog);
+  }
+
   //************************************
+
+  static openDefaultDialog(config?:any): any{
+    if(!config) config = {width: '250px', height:'250px', data: { name: 'test', animal: 'test' }};
+
+    let dialog = this.dialog.open(DialogDefaultComponent, config);
+    return dialog;
+    // dialog.afterClosed().subscribe(result => {
+    //   console.log('The dialog was closed');
+    // });
+  }
+
+
+  static openRemoveDialog(config?:any): any {
+    if(!config) config = {width: '250px', height:'250px', data: { name: 'test', animal: 'test' }};
+
+    let dialog = this.dialog.open(DialogRemoveComponent, config);
+    return dialog;
+  }
 
   static get env(){
     return Env;
