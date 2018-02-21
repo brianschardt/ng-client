@@ -3,14 +3,15 @@ import { Model }            from 'browser-model';
 import { UtilService }      from './../services/util.service';
 import { AppInjector }      from './../app.module';
 import * as _               from 'underscore';
-import { LoginOptions } from 'ngx-facebook';
-
+import { LoginOptions }     from 'ngx-facebook';
+import { Company }          from './company.model';
 //interfaces
-import { LoginInfo }      from './../interfaces/login-info';
+import { LoginInfo }        from './../interfaces/login-info';
 
 export class User extends Model {
   apiUpdateValues:Array<string> = ['email', 'phone', 'first', 'last'];//these are the values that will be sent to the API
 
+  _id;
   first;
   last;
   auth;
@@ -49,6 +50,7 @@ export class User extends Model {
     return full_name;
   }
 
+
   logout(){
     this.remove();
     this.util.route('/home');
@@ -76,6 +78,9 @@ export class User extends Model {
     this.save();
   }
 
+  Companies(){
+    return this.belongsToMany(Company, 'user_ids', '_id');
+  }
 
   //************************************
   //********* STATIC METHODS ***********
@@ -89,7 +94,7 @@ export class User extends Model {
     return this.util.fb;
   }
 
-  static Auth(){
+  static Auth(){//Grabs currently authenticated user
     let user:User = <User> this.findOne({auth:true});
     return user;
   }

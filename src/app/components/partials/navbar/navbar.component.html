@@ -12,6 +12,7 @@
   <div fxLayout="row" fxShow="false" fxShow.gt-sm>
     <div *ngIf="user">
       <button class="nav-button" mat-button routerLink="/user/profile">Profile</button>
+      <button class="nav-button" mat-button routerLink="/company/create">Create Company</button>
       <button class="nav-button" mat-button (click)="onLogout()">Logout</button>
     </div>
     <div *ngIf="!user">
@@ -28,6 +29,8 @@
 <mat-menu yPosition="below" #menu="matMenu" [overlapTrigger]="false">
   <div *ngIf="user">
     <button class="nav-menu-item" mat-menu-item routerLink="/user/profile">Profile</button>
+    <button class="nav-menu-item" mat-menu-item routerLink="/company/create">Create Company</button>
+    <button class="nav-menu-item" mat-menu-item routerLink="/company/list">My Companies</button>
     <mat-divider></mat-divider>
     <button class="nav-menu-item" mat-menu-item (click)="onLogout()">Logout</button>
   </div>

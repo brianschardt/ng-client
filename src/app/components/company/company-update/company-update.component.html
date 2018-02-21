@@ -1,0 +1,25 @@
+
+<div ngClass.lt-md="mt-50" ngClass.gt-sm="mt-100" fxLayout="row" fxLayoutAlign="center">
+  <mat-card ngClass.lt-md="width-300" ngClass.gt-sm="width-500">
+
+    <div fxLayout="row" fxLayoutAlign="center" class="mat-display-1">Update Company: {{company.name}}</div>
+    <form (ngSubmit)="onSubmit()"  [formGroup]="companyForm">
+
+      <mat-form-field class="full-width">
+        <input formControlName="name" [(ngModel)]="company.name" matInput placeholder="Name" name="name">
+        <!--<mat-hint>Errors appear instantly!</mat-hint>-->
+        <mat-error>{{getInputErrorMessage('name')}}</mat-error>
+      </mat-form-field>
+
+      <h2>
+        Users:
+      </h2>
+      <div *ngFor="let user of users">
+          {{user.full_name}}
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center" >
+        <button mat-raised-button [disabled]="!companyForm.valid">Update</button>
+      </div>
+    </form>
+  </mat-card>
+</div>

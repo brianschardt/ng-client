@@ -2,6 +2,7 @@ import { Component, OnInit }      from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { UtilService }            from "../../../services/util.service";
 import { User }                   from './../../../models/user.model';
+import { Company }                from './../../../models/company.model';
 import { MatSnackBar }            from '@angular/material';
 
 @Component({
@@ -10,7 +11,8 @@ import { MatSnackBar }            from '@angular/material';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  user;
+  user: User;
+  company: Company;
 
   profileForm = new FormGroup({
     email: new FormControl('', []),
@@ -38,11 +40,13 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.user  = User.Auth();
-
-
+    this.company = Company.findOneAndUpdate({_id:1}, {name:'Test', _id:1, user_ids:[this.user._id]}, {upsert:true});
+    Company.findOneAndUpdate({_id:2}, {name:'Test', _id:2, user_ids:[this.user._id]}, {upsert:true});
     this.user.on(['saveApi', 'save'], ()=>{
       console.log('saved to api')
     })
+
+    console.log('companies', this.user.Companies(), 'users', this.company.Users());
   }
 
   ngOnDestroy(){

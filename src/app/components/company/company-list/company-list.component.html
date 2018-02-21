@@ -1,0 +1,21 @@
+
+<div ngClass.lt-md="mt-50" ngClass.gt-sm="mt-100" fxLayout="row" fxLayoutAlign="center">
+  <mat-card ngClass.lt-md="width-300" ngClass.gt-sm="width-500">
+
+    <div class="center center mat-subheading-1" *ngIf="companies.length <= 0 || !companies">
+      You have no companies
+      <a routerLink="/company/create" >Click Here</a> to create one!
+    </div>
+
+    <div class="center center mat-subheading-1" *ngIf="companies.length > 0">
+      <div>Click on any of the companies to edit</div>
+      <div *ngFor="let company of companies">
+        <br>
+        <button class="center " mat-raised-button (click)="company.to('update')">{{company.name}}</button>
+      </div>
+    </div>
+
+  </mat-card>
+</div>
+
+

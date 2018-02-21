@@ -38,6 +38,12 @@ export class UtilService {
     localStorage.removeItem(name);
   }
 
+  getUrlParams(aroute:any){
+    return new Promise(resolve=>{
+      aroute.params.subscribe( params => resolve(params) );
+    })
+  }
+
   to(promise, parse?) {//global function that will help use handle promise rejections, this article talks about it http://blog.grossman.io/how-to-write-async-await-without-try-catch-blocks-in-javascript/
     return promise.then(data => {
       return [null, data];

@@ -30,6 +30,9 @@ import { NavbarComponent } from './components/partials/navbar/navbar.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { ProfileComponent } from './components/user/profile/profile.component';
+import { CompanyCreateComponent } from './components/company/company-create/company-create.component';
+import { CompanyListComponent } from './components/company/company-list/company-list.component';
+import { CompanyUpdateComponent } from './components/company/company-update/company-update.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +43,9 @@ import { ProfileComponent } from './components/user/profile/profile.component';
     LoginComponent,
     RegisterComponent,
     ProfileComponent,
+    CompanyCreateComponent,
+    CompanyListComponent,
+    CompanyUpdateComponent,
 
   ],
   imports: [

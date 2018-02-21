@@ -105,9 +105,54 @@ export class Model{
     return instance_differences;
   }
 
-  //**************************************************
-  //*********** STATIC *******************************
-  //**************************************************
+  //********               *********
+  //******** RELATIONSHIPS *********
+  //********               *********
+
+  belongsTo(model:any, foreign_key:any, reference_key:any){
+    let query_obj:any = {}
+    query_obj[reference_key] = (<any> this)[foreign_key];
+    return model.findOne(query_obj);
+  }
+
+  hasOne(model:any, foreign_key:any, reference_key:any){
+    let query_obj:any = {}
+    query_obj[foreign_key] = (<any> this)[reference_key];
+    return model.findOne(query_obj);
+  }
+
+  hasMany(model:any, foreign_key:any, reference_key:any){
+    let query_obj:any = {}
+    query_obj[foreign_key] = (<any> this)[reference_key];
+    return model.find(query_obj);
+  }
+
+  belongsToMany(model:any, foreign_key:any, reference_key:any, contains?:boolean){
+    let query_obj:any = {};
+    if(contains){
+
+      let value_array = (<any> this)[foreign_key];
+      let instance_array:Array<string> = [];
+      for (let i in value_array){
+        let value = value_array[i];
+        query_obj[reference_key] = value;
+        let instances = model.find(query_obj)
+        instance_array = instance_array.concat(instances)
+      }
+
+      return instance_array;
+
+    }else{
+      query_obj[foreign_key] = (<any> this)[reference_key];
+      return model.findArray(query_obj);
+    }
+
+  }
+
+
+  //***************************************
+  //*********** STATIC ********************
+  //***************************************
   static _instances: Array<Model> = [];
 
   static describe(): Array<string> {
@@ -298,6 +343,21 @@ export class Model{
     return this.create(instance, single);
   }
 
+
+  static find(search:object, single?:boolean){
+    let all_data = this.getAllData();
+    let instances = all_data.filter((data:object)=>{ return _.isMatch(data, search);});
+    let final_objs = instances;
+    let array = []
+    for (let i in final_objs){
+      let instance = final_objs[i];
+      instance = this.instantiateObject(instance, single)
+      array.push(instance);
+    }
+
+    return array;
+  }
+
   static findOne(search?:object, single?:boolean){
     let all_data = this.getAllData();
     let instance;
@@ -312,9 +372,14 @@ export class Model{
     return instance;
   }
 
-  static find(search:object, single?:boolean){
+  static findArray(search:any, single?:boolean){
     let all_data = this.getAllData();
-    let instances = all_data.filter((data:object)=>{ return _.isMatch(data, search);});
+    let key = _.keys(search)[0];
+    let value = search[key];
+    let instances = all_data.filter((data:any)=>{
+      return data[key].includes(value);
+    });
+
     let final_objs = instances;
     let array = []
     for (let i in final_objs){
@@ -324,6 +389,24 @@ export class Model{
     }
 
     return array;
+  }
+
+  static findOneArray(search?:any, single?:boolean){
+    let all_data = this.getAllData();
+    let instance;
+    if(!search){
+      instance = all_data[0];
+    }else{
+      let key = _.keys(search)[0];
+      let value = search[key];
+      instance = all_data.filter((data:any)=>{
+        return data[key].includes(value)[0];
+      });
+    }
+    if(typeof instance === 'undefined' || !instance) return null;
+
+    instance = this.instantiateObject(instance, single)
+    return instance;
   }
 
   static findOneAndUpdate(search:object, data?:any, options?:any){
