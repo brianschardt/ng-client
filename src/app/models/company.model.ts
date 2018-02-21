@@ -1,9 +1,9 @@
 import { Model }            from 'browser-model';
 // import { Model }            from './model';
-import { UtilService }      from './../services/util.service';
-import { AppInjector }      from './../app.module';
 import { User }             from './user.model';
 import * as _               from 'underscore';
+import { API }              from './../helpers/api.helper';
+import { Util }             from './../helpers/util.helper';
 
 export class Company extends Model {
   apiUpdateValues:Array<string> = ['name'];//these are the values that will be sent to the API
@@ -17,14 +17,8 @@ export class Company extends Model {
     user_ids:[{type:'string'}],
   };
 
-  util;
-
-
   constructor(obj:object){
     super(obj);
-    //this is the only maintainable way for model to use outside services
-    //this is what causes the ciurcular dependency warning, however this will not cause any errors
-    this.util        = AppInjector.get(UtilService); //https://stackoverflow.com/questions/39101865/angular-2-inject-dependency-outside-constructor
   }
 
   Users(){
@@ -32,23 +26,20 @@ export class Company extends Model {
   }
 
   to(action){
-    return this.util.route('/company/'+action+'/'+this._id);
+    return Util.route('/company/'+action+'/'+this._id);
   }
 
-  routeMain(){
-    return this.util.route('/company/update/'+this._id);
+  async saveAPI(){
+    return API.save(this, '/v1/companies/'+this._id);
   }
 
   //Static
-  static get util(){
-    return AppInjector.get(UtilService);
-  }
 
   static async getAllAuthCompanies(){
     let err, res;
-    [err, res] = await this.util.to(this.util.get('/v1/companies'));
-    if(err) this.util.TE(err.message, true);
-    if(!res.success) this.util.TE(res.error, true);
+    [err, res] = await Util.to(Util.get('/v1/companies'));
+    if(err) Util.TE(err.message, true);
+    if(!res.success) Util.TE(res.error, true);
 
     let companies = []
     for(let i in res.companies){
@@ -74,9 +65,9 @@ export class Company extends Model {
 
   static async CreateAPI(companyInfo:any){
     let err, res;
-    [err, res] = await this.util.to(this.util.post('/v1/companies', companyInfo));
-    if(err) this.util.TE(err.message, true);
-    if(!res.success) this.util.TE(res.error, true);
+    [err, res] = await Util.to(Util.post('/v1/companies', companyInfo));
+    if(err) Util.TE(err.message, true);
+    if(!res.success) Util.TE(res.error, true);
 
     let company = this.resCreate(res.company);
     company.emit(['newly-created'], companyInfo, true);
@@ -88,9 +79,9 @@ export class Company extends Model {
     if(company) return company;
 
     let err, res; //get from API
-    [err, res] = await this.util.to(this.util.get('/v1/companies/'+id));
-    if(err) this.util.TE(err.message, true);
-    if(!res.success) this.util.TE(res.error, true);
+    [err, res] = await Util.to(Util.get('/v1/companies/'+id));
+    if(err) Util.TE(err.message, true);
+    if(!res.success) Util.TE(res.error, true);
 
     let company_info = res.company;
     company = this.resCreate(res.company);

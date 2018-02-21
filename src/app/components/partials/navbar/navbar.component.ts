@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { UtilService } from './../../../services/util.service';
+import { Util } from './../../../helpers/util.helper';
 import { User } from './../../../models/user.model';
 
 @Component({
@@ -10,7 +10,7 @@ import { User } from './../../../models/user.model';
 })
 export class NavbarComponent implements OnInit {
   user:User ;
-  constructor(public util:UtilService, private cd:ChangeDetectorRef) {
+  constructor(private cd:ChangeDetectorRef) {
   }
 
   ngOnInit() {

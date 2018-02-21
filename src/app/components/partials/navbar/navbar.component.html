@@ -2,7 +2,8 @@
 
   <button mat-button routerLink="/">
     <mat-icon>home</mat-icon>
-    {{util.env.app_name}}
+    <!--{{util.env.app_name}}-->
+    test
   </button>
 
   <!-- This fills the remaining space of the current row -->
@@ -11,7 +12,7 @@
 
   <div fxLayout="row" fxShow="false" fxShow.gt-sm>
     <div *ngIf="user">
-      <button class="nav-button" mat-button routerLink="/user/profile">Profile</button>
+      <button class="nav-button" mat-button routerLink="/user/update">Profile</button>
       <button class="nav-button" mat-button routerLink="/company/create">Create Company</button>
       <button class="nav-button" mat-button (click)="onLogout()">Logout</button>
     </div>
@@ -28,7 +29,7 @@
 </mat-toolbar>
 <mat-menu yPosition="below" #menu="matMenu" [overlapTrigger]="false">
   <div *ngIf="user">
-    <button class="nav-menu-item" mat-menu-item routerLink="/user/profile">Profile</button>
+    <button class="nav-menu-item" mat-menu-item routerLink="/user/update">Profile</button>
     <button class="nav-menu-item" mat-menu-item routerLink="/company/create">Create Company</button>
     <button class="nav-menu-item" mat-menu-item routerLink="/company/list">My Companies</button>
     <mat-divider></mat-divider>

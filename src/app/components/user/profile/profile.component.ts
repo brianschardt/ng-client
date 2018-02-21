@@ -1,6 +1,7 @@
 import { Component, OnInit }      from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { UtilService }            from "../../../services/util.service";
+import { Util }                   from "../../../helpers/util.helper";
+
 import { User }                   from './../../../models/user.model';
 import { Company }                from './../../../models/company.model';
 import { MatSnackBar }            from '@angular/material';
@@ -36,7 +37,7 @@ export class ProfileComponent implements OnInit {
     this.profileForm.get(input_name).setErrors({custom: message});
   }
 
-  constructor(private util:UtilService, public snackBar: MatSnackBar) { }
+  constructor(public snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.user  = User.Auth();
@@ -56,7 +57,7 @@ export class ProfileComponent implements OnInit {
   async onSubmit(){
     // console.log('user', this.user);
     let err, res;
-    [err, res] = await this.util.to(this.user.saveAPI());
+    [err, res] = await Util.to(this.user.saveAPI());
 
     if(err){
       if(err.message.includes('phone') || err.message.includes('Phone')){

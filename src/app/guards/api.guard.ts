@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { CanActivate} from '@angular/router';
 import { User }       from './../models/user.model';
-import { UtilService } from './../services/util.service';
+import { Util } from './../helpers/util.helper';
 
 @Injectable()
 export class ApiGuard implements CanActivate {
-  constructor(private utilService: UtilService){}
+  constructor(){}
   canActivate(): boolean {
     if(User.Auth()){
       return true;
     }else{
-      this.utilService.route('/home');
+      Util.route('/home');
       return false;
     }
   }

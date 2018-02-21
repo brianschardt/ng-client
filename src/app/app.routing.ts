@@ -21,7 +21,7 @@ const APP_ROUTES: Routes = [
 
   { path: 'login',          component: LoginComponent,pathMatch: 'full' },
 
-  { path: 'user/profile',     component: ProfileComponent,canActivate:[ApiGuard], pathMatch: 'full' },
+  { path: 'user/update',     component: ProfileComponent,canActivate:[ApiGuard], pathMatch: 'full' },
 
   { path: 'company/create',     component: CompanyCreateComponent, canActivate:[ApiGuard], pathMatch: 'full' },
   { path: 'company/list',       component: CompanyListComponent,   canActivate:[ApiGuard], pathMatch: 'full' },

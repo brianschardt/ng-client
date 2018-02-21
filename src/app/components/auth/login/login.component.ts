@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { UtilService } from "../../../services/util.service";
+import { Util } from "../../../helpers/util.helper";
 import { User } from './../../../models/user.model';
 
 export interface UserLoginInfo {
@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
     this.loginForm.get(input_name).setErrors({custom: message});
   }
 
-  constructor(private util:UtilService) { }
+  constructor() { }
 
   ngOnInit() {
 
@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
 
   async login(data: Object){
     var err;
-    [err, this.user] = await this.util.to(User.LoginReg(data));
+    [err, this.user] = await Util.to(User.LoginReg(data));
     if(err){
       if(err.message.includes('password') || err.message.includes('Password')){
         this.throwInputError('password', err.message);
@@ -87,7 +87,7 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.util.route('user/profile');
+    return this.user.to('update');
   }
 
   async create(data: Object){
@@ -98,10 +98,10 @@ export class LoginComponent implements OnInit {
     }
 
     let err;
-    [err, this.user] = await this.util.to(User.CreateAccount(data))
+    [err, this.user] = await Util.to(User.CreateAccount(data))
 
-    if(err) this.util.TE(err);
+    if(err) Util.TE(err);
 
-    this.util.route('user/profile');
+    return this.user.to('update');
   }
 }

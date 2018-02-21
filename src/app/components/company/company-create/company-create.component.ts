@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit }                  from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Company } from './../../../models/company.model';
-import { UtilService } from "../../../services/util.service";
-import { MatSnackBar }            from '@angular/material';
+import { Company }                            from './../../../models/company.model';
+import { MatSnackBar }                        from '@angular/material';
+import { Util }                               from './../../../helpers/util.helper';
 
 export interface CompanyInfo {
   name:string,
@@ -15,7 +15,7 @@ export interface CompanyInfo {
 })
 export class CompanyCreateComponent implements OnInit {
   company_info:CompanyInfo = {name:''};
-  constructor(private util:UtilService, public snackBar: MatSnackBar) { }
+  constructor(public snackBar: MatSnackBar) { }
 
   companyForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
@@ -36,7 +36,7 @@ export class CompanyCreateComponent implements OnInit {
 
   async onSubmit(){
     let err, company;
-    [err, company] = await this.util.to(Company.CreateAPI(this.company_info));
+    [err, company] = await Util.to(Company.CreateAPI(this.company_info));
     company.to('update');
   }
 
