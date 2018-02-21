@@ -40,14 +40,9 @@ export class ProfileComponent implements OnInit {
   constructor(public snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    this.user  = User.Auth();
-    this.company = Company.findOneAndUpdate({_id:1}, {name:'Test', _id:1, user_ids:[this.user._id]}, {upsert:true});
-    Company.findOneAndUpdate({_id:2}, {name:'Test', _id:2, user_ids:[this.user._id]}, {upsert:true});
-    this.user.on(['saveApi', 'save'], ()=>{
-      console.log('saved to api')
-    })
 
-    console.log('companies', this.user.Companies(), 'users', this.company.Users());
+    this.user  = User.Auth();
+
   }
 
   ngOnDestroy(){

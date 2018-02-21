@@ -36,7 +36,6 @@ export class Env {
   }
 
   static get app_name(): string{
-    console.log(environment);
     if(!this._app_name) {
       this.app_name = environment.app_name;
     }

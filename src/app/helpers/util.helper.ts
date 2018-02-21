@@ -93,7 +93,6 @@ export class Util {
   }
 
   static async put(url, data){
-    console.log('put');
     var headers = new Headers();
     if(url[0]=='/'){
       url = this.getApiUrl()+url;

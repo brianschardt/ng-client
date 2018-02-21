@@ -13,6 +13,7 @@
     <div *ngIf="user">
       <button class="nav-button" mat-button routerLink="/user/update">Profile</button>
       <button class="nav-button" mat-button routerLink="/company/create">Create Company</button>
+      <button class="nav-button" mat-button routerLink="/company/list">My Companies</button>
       <button class="nav-button" mat-button (click)="onLogout()">Logout</button>
     </div>
     <div *ngIf="!user">

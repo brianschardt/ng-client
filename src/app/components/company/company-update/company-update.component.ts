@@ -39,7 +39,6 @@ export class CompanyUpdateComponent implements OnInit {
     this.company = await Company.getById(this.url_params.id);
     this.users = this.company.Users();
 
-    console.log('users', this.users);
   }
 
   async onSubmit(){

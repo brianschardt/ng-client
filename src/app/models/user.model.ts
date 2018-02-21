@@ -3,6 +3,7 @@ import { Model }            from 'browser-model';
 import * as _               from 'underscore';
 import { LoginOptions }     from 'ngx-facebook';
 import { Company }          from './company.model';
+import * as jwt_decode      from 'jwt-decode';
 //interfaces
 import { LoginInfo }        from './../interfaces/login-info';
 import { API }              from './../helpers/api.helper';
@@ -65,6 +66,10 @@ export class User extends Model {
     return Util.route('/user/'+action);
   }
 
+  parseToken(){
+    return jwt_decode(this.token);
+  }
+
   //************************************
   //********* STATIC METHODS ***********
   //************************************
@@ -77,11 +82,22 @@ export class User extends Model {
 
   static Auth(){//Grabs currently authenticated user
     let user:User = <User> this.findOne({auth:true});
+    if(user){
+      let parse = user.parseToken();
+
+      let cur_time_date = new Date();
+      let cur_time = cur_time_date.getTime()/1000;
+
+      if(cur_time>=parse.exp){//get the users token expiration time if it is up log them out
+        user.logout()
+        return null;
+      }
+    }
+
     return user;
   }
 
   static Login(info: LoginInfo){
-    // this.setAuthToken(info.token);
     info.user.auth = true;
     info.user.token = info.token;
     let user = <User> User.create(info.user);
