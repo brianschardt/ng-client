@@ -38,22 +38,36 @@ export class Util {
 
   //************************************
 
-  static openDefaultDialog(config?:any): any{
-    if(!config) config = {width: '250px', height:'250px', data: { title: 'title test', body: 'body test' }};
+  static async openDefaultDialog(config?:any){
+    if(!config) config = {width: '250px', height:'250px', data: { title: 'title test', body: 'Are you sure you want to delete this?' }};
 
     let dialog = this.dialog.open(DialogDefaultComponent, config);
-    return dialog;
+
+    return new Promise(resolve=>{
+      dialog.afterClosed().subscribe(result => {
+        console.log('The dialog was closed', result);
+        resolve();
+      });
+    })
+
     // dialog.afterClosed().subscribe(result => {
     //   console.log('The dialog was closed');
     // });
   }
 
 
-  static openRemoveDialog(config?:any): any {
-    if(!config) config = {width: '250px', height:'250px', data: { title: 'title test', body: 'body test' }};
+  static async openRemoveDialog(config?:any){
+    let nconfig = {}
+    nconfig['width'] = (!config || !config.width) ? '250px' : config.width;
+    nconfig['height'] = (!config || !config.height) ? '250px' : config.height;
+    nconfig['data'] = (!config || !config.data) ? {'title':'Warning', 'body' :'Are you sure you want to delete this?'} : config.data;
 
-    let dialog = this.dialog.open(DialogRemoveComponent, config);
-    return dialog;
+    let dialog = this.dialog.open(DialogRemoveComponent, nconfig);
+    return new Promise(resolve=>{
+      dialog.afterClosed().subscribe(result => {
+        resolve(result);
+      });
+    })
   }
 
   static get env(){

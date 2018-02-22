@@ -7,7 +7,7 @@ import { Company } from "./../../../models/company.model";
   styleUrls: ['./company-list.component.css']
 })
 export class CompanyListComponent implements OnInit {
-  companies;
+  companies:Array<Company> = [];
   constructor() { }
 
   async ngOnInit() {

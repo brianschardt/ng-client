@@ -53,15 +53,17 @@ export class CompanyUpdateComponent implements OnInit {
   }
 
   async onDelete(){
-    let err, res;
-    Util.openRemoveDialog();
-    // [err, res] = await Util.to(this.company.removeAPI());
-    // if(err){
-    //   console.log(err, 'err')
-    //   if(err.message == 'Nothing Updated') this.snackBar.open('Company', 'Nothing to Update', {duration: 2000});
-    //   return;
-    // }
-    //
-    // return Company.to('list');
+    let remove = await Util.openRemoveDialog({data:{title:'Warning', body:'Are you sure you want to delete this company?'}});
+    if(remove){
+      let err, res;
+      [err, res] = await Util.to(this.company.removeAPI());
+      if(err){
+        console.log(err, 'err')
+        if(err.message == 'Nothing Updated') this.snackBar.open('Company', 'Nothing to Update', {duration: 2000});
+        return;
+      }
+
+      return Company.to('list');
+    }
   }
 }
