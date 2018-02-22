@@ -1,15 +1,19 @@
 
-
-<div style="height:100%" fxLayout="row" fxLayoutAlign="center end">
-
-  <div fxLayout="row" fxLayoutAlign="center start">
-    Title
+<div fxLayout="column" style="height:100%">
+  <div fxFlex="grow" fxLayout="row" fxFlexAlign="center">
+      Title
   </div>
 
-  <div fxLayout="row" fxLayoutAlign="center end">
+  <div fxLayout="row"  fxLayoutAlign="center end" fxLayoutGap="10px">
     <button mat-raised-button (click)="onCancel()">Cancel</button>
     <button mat-raised-button (click)="onDelete()">Delete</button>
   </div>
 </div>
+
+
+
+
+
+
 
 
