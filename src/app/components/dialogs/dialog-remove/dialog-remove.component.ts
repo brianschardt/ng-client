@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject }      from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA }  from '@angular/material';
 
 @Component({
   selector: 'app-dialog-remove',
@@ -7,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DialogRemoveComponent implements OnInit {
 
-  constructor() { }
+  constructor(public dialogRef: MatDialogRef<DialogRemoveComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
+
   }
 
 }

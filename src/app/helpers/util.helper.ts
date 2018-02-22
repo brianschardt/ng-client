@@ -39,7 +39,7 @@ export class Util {
   //************************************
 
   static openDefaultDialog(config?:any): any{
-    if(!config) config = {width: '250px', height:'250px', data: { name: 'test', animal: 'test' }};
+    if(!config) config = {width: '250px', height:'250px', data: { title: 'title test', body: 'body test' }};
 
     let dialog = this.dialog.open(DialogDefaultComponent, config);
     return dialog;
@@ -50,7 +50,7 @@ export class Util {
 
 
   static openRemoveDialog(config?:any): any {
-    if(!config) config = {width: '250px', height:'250px', data: { name: 'test', animal: 'test' }};
+    if(!config) config = {width: '250px', height:'250px', data: { title: 'title test', body: 'body test' }};
 
     let dialog = this.dialog.open(DialogRemoveComponent, config);
     return dialog;
