@@ -15,7 +15,7 @@ export class Company extends Model {
     _id:{type:'string', primary:true},//this means every time you make a new object you must give it a _id
     name:{type:'string'},
     test:{name:{type:'string'}},
-    users:[{user:{type:'string'}, permissions:{type:'string'}}],
+    users:[{user:{type:'string'}, permissions:[{type:'string'}]}],
   };
 
   constructor(obj:object){
@@ -65,9 +65,12 @@ export class Company extends Model {
     if(company) return company;
 
     let company_info = res_company;
-    // let user_ids = company_info.users;
-    console.log(company_info.users);
-    company_info.users = company_info.users;
+
+    // let user_ids = company_info.users.map(user=>user.user);
+    // company_info.user_ids = user_ids;
+
+    company_info.users = company_info.users
+
     company_info.test = {name:'test'};
 
     company = this.create(company_info);
