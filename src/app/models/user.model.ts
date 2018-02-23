@@ -1,5 +1,5 @@
-// import { Model }            from 'browser-model';
-import { Model }            from './model';
+import { Model }            from 'browser-model';
+// import { Model }            from './model';
 import * as _               from 'underscore';
 import { LoginOptions }     from 'ngx-facebook';
 import { Company }          from './company.model';

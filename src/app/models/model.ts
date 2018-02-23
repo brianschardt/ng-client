@@ -1,5 +1,5 @@
 import * as _ from 'underscore';
-import * as get from 'lodash.get';
+import get = require('lodash.get');
 
 export class Model{
 
@@ -362,7 +362,7 @@ export class Model{
   //   return array;
   // }
 
-  static search(search){
+  static search(search:any){
     let all_data = this.getAllData();
 
     let instances = all_data.filter((data:object)=>{
@@ -489,29 +489,11 @@ export class Model{
     return diff;
   }
 
-  static expand(str:string, value:any)
-  {
-    var items = str.split(".") // split on dot notation
-    var output = {} // prepare an empty object, to fill later
-    var ref = output // keep a reference of the new object
-
-    //  loop through all nodes, except the last one
-    for(var i = 0; i < items.length - 1; i ++)
-    {
-      ref[items[i]] = {} // create a new element inside the reference
-      ref = ref[items[i]] // shift the reference to the newly created object
-    }
-
-    ref[items[items.length - 1]] = value // apply the final value
-
-    return output // return the full object
-  }
-
   static newGet(obj:object, str:string)
   {
     var keys = str.split(".") // split on dot notation
 
-    var check_array = [];
+    var check_array:Array<any> = [];
 
     for(var i in keys)
     {
