@@ -1,5 +1,5 @@
-import { Model }            from 'browser-model';
-// import { Model }            from './model';
+// import { Model }            from 'browser-model';
+import { Model }            from './model';
 import * as _               from 'underscore';
 import { LoginOptions }     from 'ngx-facebook';
 import { Company }          from './company.model';
@@ -59,7 +59,7 @@ export class User extends Model {
   }
 
   Companies(){
-    return this.belongsToMany(Company, 'user_ids', '_id');
+    return this.belongsToMany(Company, 'users.user', '_id');
   }
 
   to(action){

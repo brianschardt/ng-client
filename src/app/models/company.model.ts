@@ -1,5 +1,5 @@
-import { Model }            from 'browser-model';
-// import { Model }            from './model';
+// import { Model }            from 'browser-model';
+import { Model }            from './model';
 import { User }             from './user.model';
 import * as _               from 'underscore';
 import { API }              from './../helpers/api.helper';
@@ -14,7 +14,8 @@ export class Company extends Model {
   static SCHEMA = {
     _id:{type:'string', primary:true},//this means every time you make a new object you must give it a _id
     name:{type:'string'},
-    user_ids:[{type:'string'}],
+    test:{name:{type:'string'}},
+    users:[{user:{type:'string'}, permissions:{type:'string'}}],
   };
 
   constructor(obj:object){
@@ -22,7 +23,7 @@ export class Company extends Model {
   }
 
   Users(){
-    return this.belongsToMany(User, 'user_ids', '_id', true);
+    return this.belongsToMany(User, 'users.user', '_id', true);
   }
 
   to(action){
@@ -64,8 +65,10 @@ export class Company extends Model {
     if(company) return company;
 
     let company_info = res_company;
-    let user_ids = company_info.users.map(user=>user.user);
-    company_info.user_ids = user_ids;
+    // let user_ids = company_info.users;
+    console.log(company_info.users);
+    company_info.users = company_info.users;
+    company_info.test = {name:'test'};
 
     company = this.create(company_info);
     return company;

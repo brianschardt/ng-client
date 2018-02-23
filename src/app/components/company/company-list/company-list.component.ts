@@ -12,6 +12,11 @@ export class CompanyListComponent implements OnInit {
 
   async ngOnInit() {
     this.companies = await Company.getAllAuthCompanies();
+
+    let company1 = Company.find({'name':"Parcel Pending"});
+    console.log('company 1', company1);
+    let company = Company.find({'test.name':"test"})
+    console.log('company', company);
   }
 
 }
