@@ -9,5 +9,5 @@ export const environment = {
   facebook_app_id:'1234567890',
 
   app_name:'Your Company',
-  url:'http://localhost:4200',
+  url:'http://localhost:1515',
 };

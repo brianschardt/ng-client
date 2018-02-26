@@ -4,7 +4,10 @@ import { User } from '../../../models/user.model';
 
 export interface FooterLinks {
   header: string;
-  links: Array<object>;
+  links: [{
+    name: string;
+    route: string;
+  }];
 }
 
 @Component({
@@ -18,6 +21,8 @@ export class FooterComponent implements OnInit {
   env;
   user: User;
 
+  // Refers to interface in case footer links are specialized for each user
+  // this is all hard coded data. can be pulled from a db/user specific
   footer_links: Array<FooterLinks> = [
     {
       header: 'Products',
@@ -30,18 +35,18 @@ export class FooterComponent implements OnInit {
     {
       header: 'About',
       links: [{name: 'Our Mission', route: 'home'}, {name: 'Our Story', route: 'login'}, {name: 'Our People', route: 'home'}]
-
     }
     ];
+
   constructor() { }
 
   ngOnInit() {
     this.user = User.Auth();
     this.env = Util.env;
-    User.on(['auth', 'saveApi'], (auth_state)=>{//data will be different depending on which event was emitted
+    User.on(['auth', 'saveApi'], (auth_state) => { // data will be different depending on which event was emitted
       console.log('the user has:', auth_state);
       this.user = User.Auth();
-      //we can dynamically make the view check on cvertain events. For large apps this is very efficient
+      // we can dynamically make the view check on cvertain events. For large apps this is very efficient
     });
     }
 }

@@ -28,7 +28,7 @@ export class Env {
   }
 
   static set app_name(name:string){
-    this._app_name = name
+    this._app_name = name;
     this._app_first = name.split(' ')[0];
     if(name.split(' ').length > 1){
       this._app_second = name.split(' ').slice(1).join(' ');
