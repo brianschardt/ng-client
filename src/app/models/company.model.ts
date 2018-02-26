@@ -51,7 +51,6 @@ export class Company extends Model {
     if(!res.success) Util.TE(res.error, true);
 
     let companies = []
-    console.log('res' ,res.companies);
     for(let i in res.companies){
       let company_info = res.companies[i];
       let company = this.resCreate(company_info);
@@ -64,13 +63,10 @@ export class Company extends Model {
   static resCreate(res_company){//create company instance from a company response
     let company = this.findById(res_company.id);
     if(company) return company;
-    console.log('res company', res_company);
     let company_info = res_company;
     company_info.id = res_company.id;
 
     company_info.users = res_company.users;
-    console.log('created company', company_info);
-    console.log('res company', res_company);
 
     company = this.create(company_info);
     return company;
@@ -81,7 +77,6 @@ export class Company extends Model {
     [err, res] = await Util.to(Util.post('/v1/companies', companyInfo));
     if(err) Util.TE(err.message, true);
     if(!res.success) Util.TE(res.error, true);
-    console.log('res c', res);
     let company = this.resCreate(res.company);
     company.emit(['newly-created'], companyInfo, true);
     return company;

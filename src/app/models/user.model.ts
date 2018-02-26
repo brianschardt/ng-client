@@ -50,6 +50,7 @@ export class User extends Model {
 
   logout(){
     this.remove();
+    localStorage.clear();//remove all data in storage
     Util.route('/home');
     this.emit(['logout', 'auth'], 'logout', true);
   }
@@ -103,7 +104,6 @@ export class User extends Model {
 
     user_info.auth  = true;
     user_info.token = info.token;
-    user_info.id    = info._id;
 
     let user = <User> User.create(user_info);
     user.emit(['login', 'auth'], 'login', true);
