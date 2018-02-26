@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators} from '@angular/forms';
 import { Util } from "../../../helpers/util.helper";
 import { User } from './../../../models/user.model';
 
@@ -49,7 +49,6 @@ export class LoginComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-
   }
 
   async onSubmit(){

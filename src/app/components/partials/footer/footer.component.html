@@ -1,25 +1,16 @@
-
-
 <footer>
-  <mat-grid-list cols="3" rowHeight="50px">
-
-    <!--1-->
-    <mat-grid-tile>
-      1
-    </mat-grid-tile>
-
-    <!--2-->
-    <mat-grid-tile>
-      2
-    </mat-grid-tile>
-
-    <!--3-->
-    <mat-grid-tile>
-      3
-    </mat-grid-tile>
-
-  </mat-grid-list>
-  <div style="padding-bottom:10px;" fxLayout="row" fxLayoutAlign="center center">
-    © {{date}} <a routerLink="/home"> {{ env.app_first}} <span> {{env.app_second}} </span></a>
+  <!--the links will only display when the user is logged out. can be changed easily by editing ngIf statement-->
+  <div *ngIf="!user" fxLayoutAlign="space-around center" style="padding: 30px;" >
+    <div fxLayout="column" *ngFor="let link_groups of footer_links">
+      <div fxLayout="column">
+        <h3 style="padding-bottom: 10px;">{{link_groups.header}}</h3>
+      </div>
+      <div *ngFor="let link of link_groups.links">
+        <div><h5><a routerLink="{{link.route}}">{{link.name}}</a></h5></div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:10px;" fxLayout="row" fxLayoutAlign="center center">
+    &copy; {{date}}<a routerLink="/home">&nbsp;{{env.app_first}}<span>&nbsp;{{env.app_second}}</span></a>
   </div>
 </footer>

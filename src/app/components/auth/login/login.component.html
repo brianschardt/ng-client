@@ -6,7 +6,7 @@
     <form (ngSubmit)="onSubmit()"  [formGroup]="loginForm">
 
       <mat-form-field class="full-width">
-        <input formControlName="unique" [(ngModel)]="user_info.unique" matInput placeholder="Email or Phone" name="unique">
+        <input formControlName="unique" [(ngModel)]="user_info.unique" matInput placeholder="Email or Phone" name="unique" [autofocus]="true">
         <!--<mat-hint>Errors appear instantly!</mat-hint>-->
         <mat-error>{{getInputErrorMessage('unique')}}</mat-error>
       </mat-form-field>
