@@ -15,7 +15,7 @@ export class CompanyListComponent implements OnInit {
     this.companies = await Company.getAllAuthCompanies();
 
     this.user = User.Auth();
-    console.log(this.user.Companies())
+    console.log('companies', this.user.Companies());
   }
 
 }
