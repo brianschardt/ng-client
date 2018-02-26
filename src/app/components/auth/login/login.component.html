@@ -2,7 +2,7 @@
   <mat-card ngClass.lt-sm="width-300" ngClass.gt-sm="width-500">
 
     <div fxLayout="row" fxLayoutAlign="center" class="mat-display-1">{{title}}</div>
-    <div *ngIf="register===true" fxLayout="row" fxLayoutAlign="center"><a (click)="onTryLogin()">Click Here </a> to log in.</div>
+    <div *ngIf="register===true" fxLayout="row" fxLayoutAlign="center"><a (click)="onTryLogin()">Click Here&nbsp;</a>to log in.</div>
     <form (ngSubmit)="onSubmit()"  [formGroup]="loginForm">
 
       <mat-form-field class="full-width">

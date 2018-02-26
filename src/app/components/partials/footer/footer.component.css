@@ -1,3 +1,13 @@
 footer{
   background-color:var(--footer)
 }
+
+.footer1{
+  padding: 30px;
+  margin-top:30px
+}
+.footer2{
+  background-color:var(--footer2);
+  color:white;
+  padding:10px;
+}
