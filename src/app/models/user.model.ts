@@ -12,7 +12,7 @@ import { Util }             from './../helpers/util.helper';
 export class User extends Model {
   apiUpdateValues:Array<string> = ['email', 'phone', 'first', 'last'];//these are the values that will be sent to the API
 
-  _id;
+  id;
   first;
   last;
   auth;
@@ -21,7 +21,7 @@ export class User extends Model {
   phone;
 
   static SCHEMA = {
-    _id:{type:'string', primary:true},//this means every time you make a new object you must give it a _id
+    id:{type:'string', primary:true},//this means every time you make a new object you must give it a _id
     first:{type:'string'},
     last:{type:'string'},
     email:{type:'string'},
@@ -50,6 +50,7 @@ export class User extends Model {
 
   logout(){
     this.remove();
+    localStorage.clear();//remove all data in storage
     Util.route('/home');
     this.emit(['logout', 'auth'], 'logout', true);
   }
@@ -59,7 +60,7 @@ export class User extends Model {
   }
 
   Companies(){
-    return this.belongsToMany(Company, 'users.user', '_id');
+    return this.belongsToMany(Company, 'users.user', 'id');
   }
 
   to(action){
@@ -98,9 +99,13 @@ export class User extends Model {
   }
 
   static Login(info: LoginInfo){
-    info.user.auth = true;
-    info.user.token = info.token;
-    let user = <User> User.create(info.user);
+
+    let user_info:any = info.user;
+
+    user_info.auth  = true;
+    user_info.token = info.token;
+
+    let user = <User> User.create(user_info);
     user.emit(['login', 'auth'], 'login', true);
     return user;
   }

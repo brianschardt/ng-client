@@ -8,11 +8,11 @@ import { Util }             from './../helpers/util.helper';
 export class Company extends Model {
   apiUpdateValues:Array<string> = ['name'];//these are the values that will be sent to the API
 
-  _id;
+  id;
   name;
 
   static SCHEMA = {
-    _id:{type:'string', primary:true},//this means every time you make a new object you must give it a _id
+    id:{type:'string', primary:true},//this means every time you make a new object you must give it a _id
     name:{type:'string'},
     test:{name:{type:'string'}},
     users:[{user:{type:'string'}, permissions:[{type:'string'}]}],
@@ -23,19 +23,19 @@ export class Company extends Model {
   }
 
   Users(){
-    return this.belongsToMany(User, 'users.user', '_id', true);
+    return this.belongsToMany(User, 'users.user', 'id', true);
   }
 
   to(action){
-    return Util.route('/company/'+action+'/'+this._id);
+    return Util.route('/company/'+action+'/'+this.id);
   }
 
   async saveAPI(){
-    return API.save(this, '/v1/companies/'+this._id);
+    return API.save(this, '/v1/companies/'+this.id);
   }
 
   async removeAPI(){
-    return API.remove(this, '/v1/companies/'+this._id);
+    return API.remove(this, '/v1/companies/'+this.id);
   }
 
   //Static
@@ -61,17 +61,12 @@ export class Company extends Model {
   }
 
   static resCreate(res_company){//create company instance from a company response
-    let company = this.findById(res_company._id);
+    let company = this.findById(res_company.id);
     if(company) return company;
-
     let company_info = res_company;
+    company_info.id = res_company.id;
 
-    // let user_ids = company_info.users.map(user=>user.user);
-    // company_info.user_ids = user_ids;
-
-    company_info.users = company_info.users
-
-    company_info.test = {name:'test'};
+    company_info.users = res_company.users;
 
     company = this.create(company_info);
     return company;
@@ -82,7 +77,6 @@ export class Company extends Model {
     [err, res] = await Util.to(Util.post('/v1/companies', companyInfo));
     if(err) Util.TE(err.message, true);
     if(!res.success) Util.TE(res.error, true);
-
     let company = this.resCreate(res.company);
     company.emit(['newly-created'], companyInfo, true);
     return company;

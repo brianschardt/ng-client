@@ -1,6 +1,6 @@
 <footer>
   <!--the links will only display when the user is logged out. can be changed easily by editing ngIf statement-->
-  <div *ngIf="!user" fxLayoutAlign="space-around center" style="padding: 30px;" >
+  <div *ngIf="!user" fxLayoutAlign="space-around center" class="footer1" >
     <div fxLayout="column" *ngFor="let link_groups of footer_links">
       <div fxLayout="column">
         <h3 style="padding-bottom: 10px;">{{link_groups.header}}</h3>
@@ -10,7 +10,7 @@
       </div>
     </div>
   </div>
-  <div style="padding:10px;" fxLayout="row" fxLayoutAlign="center center">
-    &copy; {{date}}<a routerLink="/home">&nbsp;{{env.app_first}}<span>&nbsp;{{env.app_second}}</span></a>
+  <div class="footer2" fxLayout="row" fxLayoutAlign="center center">
+    &copy; {{date}}<a style="color:white" routerLink="/home">&nbsp;{{env.app_first}}<span>&nbsp;{{env.app_second}}</span></a>
   </div>
 </footer>

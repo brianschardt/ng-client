@@ -8,6 +8,6 @@ export const environment = {
   apiUrl:'http://127.0.0.1:3000',
   facebook_app_id:'1234567890',
 
-  app_name:'Your Company',
+  app_name:'Website DevName',
   url:'http://localhost:1515',
 };

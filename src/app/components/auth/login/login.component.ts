@@ -64,8 +64,10 @@ export class LoginComponent implements OnInit {
 
   onTryLogin(){
     this.register = false;
-    this.user_info.unique='';
     this.title="Log in / Register";
+    let unique = this.user_info.unique;
+    this.loginForm.reset({unique:unique});
+    this.loginForm.setErrors(null);
   }
 
   async login(data: Object){
@@ -91,7 +93,6 @@ export class LoginComponent implements OnInit {
 
   async create(data: Object){
     if(this.user_info.confirm_password!=this.user_info.password){
-      this.throwInputError('password', 'Passwords do not match');
       this.throwInputError('confirmPassword', 'Passwords do not match');
       return
     }
