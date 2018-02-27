@@ -35,14 +35,16 @@ export class User extends Model {
   }
 
   set full_name(name:string){
-    let split = name.split(' ');
-    this.first = split[0];
-    this.last = split[1];
+    if(name){
+      let split = name.split(' ');
+      this.first = split[0];
+      this.last = split[1];
+    }
   }
 
   get full_name(){
-    let full_name = '';
-    if(this.first) full_name = `${full_name}${this.first}`;
+    let full_name;
+    if(this.first) full_name = `${this.first}`;
     if(this.last) full_name = `${full_name} ${this.last}`;
     return full_name;
   }
