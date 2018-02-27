@@ -12,7 +12,6 @@
   <div fxLayout="row" fxShow="false" fxShow.gt-sm>
     <div *ngIf="user">
         <button *ngFor="let link of nav_links_user" class="nav-button" mat-button routerLink="{{link.route}}">{{link.name}}</button>
-      <!--<button *ngFor="let link of nav_links_user" class="nav-button" mat-button routerLink="{{link.route}}">{{link.name}}</button>-->
       <button class="nav-button" mat-button (click)="onLogout()">Logout</button>
     </div>
     <div *ngIf="!user">
