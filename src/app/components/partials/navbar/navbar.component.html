@@ -7,37 +7,32 @@
 
   <!-- This fills the remaining space of the current row -->
   <span class="fill-remaining-space"></span>
-  <div *ngIf="user">hi {{user.full_name}}</div>
+  <div *ngIf="user" fxShow="false" fxShow.gt-sm>Hi {{user.full_name}}!</div>
 
   <div fxLayout="row" fxShow="false" fxShow.gt-sm>
     <div *ngIf="user">
-      <button class="nav-button" mat-button routerLink="/user/update">Profile</button>
-      <button class="nav-button" mat-button routerLink="/company/create">Create Company</button>
-      <button class="nav-button" mat-button routerLink="/company/list">My Companies</button>
+        <button *ngFor="let link of nav_links_user" class="nav-button" mat-button routerLink="{{link.route}}">{{link.name}}</button>
       <button class="nav-button" mat-button (click)="onLogout()">Logout</button>
     </div>
     <div *ngIf="!user">
-      <button class="nav-button" mat-button routerLink="/home">Home</button>
-      <button class="nav-button" mat-button routerLink="/login">Login/Register</button>
+      <button *ngFor="let link of nav_links_no_user" class="nav-button" mat-button routerLink="{{link.route}}">{{link.name}}</button>
     </div>
 
   </div>
-  <button mat-button [mat-menu-trigger-for]="menu" fxHide="false" fxHide.gt-sm>
+  <button mat-button [mat-menu-trigger-for]="rootMenu" fxHide="false" fxHide.gt-sm>
     <mat-icon>menu</mat-icon>
   </button>
 
 </mat-toolbar>
-<mat-menu yPosition="below" #menu="matMenu" [overlapTrigger]="false">
+<mat-menu yPosition="below" #rootMenu="matMenu" [overlapTrigger]="false">
   <div *ngIf="user">
-    <button class="nav-menu-item" mat-menu-item routerLink="/user/update">Profile</button>
-    <button class="nav-menu-item" mat-menu-item routerLink="/company/create">Create Company</button>
-    <button class="nav-menu-item" mat-menu-item routerLink="/company/list">My Companies</button>
+    <h3 class="nav-menu-item" style="padding: 15px;">Hi {{user.full_name}}!</h3>
+    <button *ngFor="let link of nav_links_user" class="nav-menu-item" mat-menu-item routerLink="{{link.route}}">{{link.name}}</button>
     <mat-divider></mat-divider>
     <button class="nav-menu-item" mat-menu-item (click)="onLogout()">Logout</button>
   </div>
 
   <div *ngIf="!user">
-    <button class="nav-menu-item" mat-menu-item routerLink="/home">Home</button>
-    <button class="nav-menu-item" mat-menu-item routerLink="/login">Login/Register</button>
+    <button *ngFor="let link of nav_links_no_user" class="nav-menu-item" mat-menu-item routerLink="{{link.route}}">{{link.name}}</button>
   </div>
 </mat-menu>

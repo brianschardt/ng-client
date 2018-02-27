@@ -26,15 +26,27 @@ export class FooterComponent implements OnInit {
   footer_links: Array<FooterLinks> = [
     {
       header: 'Products',
-      links: [{name: 'Software', route: 'home'}, {name: 'Hardware', route: 'login'}, {name: 'Robots', route: 'home'}]
+      links: [
+        {name: 'Software', route: 'home'},
+        {name: 'Hardware', route: 'login'},
+        {name: 'Robots', route: 'home'}
+        ]
     },
     {
       header: 'Contact',
-      links: [{name: 'Email', route: 'home'}, {name: 'Call', route: 'login'}, {name: 'Locations', route: 'user/update'}]
+      links: [
+        {name: 'Email', route: 'home'},
+        {name: 'Call', route: 'login'},
+        {name: 'Locations', route: 'user/update'}
+        ]
     },
     {
       header: 'About',
-      links: [{name: 'Our Mission', route: 'home'}, {name: 'Our Story', route: 'login'}, {name: 'Our People', route: 'home'}]
+      links: [
+        {name: 'Our Mission', route: 'home'},
+        {name: 'Our Story', route: 'login'},
+        {name: 'Our People', route: 'home'}
+        ]
     }
     ];
 
